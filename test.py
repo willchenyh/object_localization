@@ -85,7 +85,7 @@ def compute_accuracy(predictions, gtruth):
     dist = np.linalg.norm(diff, axis=1)
     num_correct = (dist <= RADIUS).sum()
     accuracy = float(num_correct) / predictions.shape[0]
-    return accuracy
+    return accuracy, dist
 
 
 def main():
@@ -97,11 +97,12 @@ def main():
 
     # check results
     train_preds = model.predict(x=X_train)
-    ac = compute_accuracy(train_preds, Y_train)
+    ac, error = compute_accuracy(train_preds, Y_train)
     print 'Train accuracy:', ac
     test_preds = model.predict(x=X_test)
-    ac = compute_accuracy(test_preds, Y_test)
+    ac, error = compute_accuracy(test_preds, Y_test)
     print 'Test accuracy:', ac
+    print error
 
 
 if __name__ == '__main__':
