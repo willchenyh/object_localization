@@ -24,6 +24,8 @@ BATCH_SIZE = 16
 NUM_COORDS = 2
 TASK_NAME = 'fine_phone'
 
+INDEX_FILE = 'index_file.txt'
+
 
 def load_model():
     # build the VGG16 network
@@ -74,6 +76,10 @@ def load_labels(file_path):
     return label_dict
 
 
+def save_index(idx_list):
+    f = open(INDEX_FILE, 'wb')
+    f.write(idx_list)
+
 def partition_data(X, Y):
     """
 
@@ -84,6 +90,9 @@ def partition_data(X, Y):
     n_samples = X.shape[0]
     idx_list = range(n_samples)
     random.shuffle(idx_list)
+
+    save_index(idx_list)
+
     test_idx = idx_list[:int(n_samples*TEST_SPLIT)]
     train_idx = idx_list[int(n_samples*TEST_SPLIT):]
     return X[train_idx,:,:,:], Y[train_idx,:], X[test_idx,:,:,:], Y[test_idx,:]
