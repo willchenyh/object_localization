@@ -84,8 +84,8 @@ def partition_data(X, Y):
     n_samples = X.shape[0]
     idx_list = range(n_samples)
     random.shuffle(idx_list)
-    test_idx = idx_list[:n_samples*TEST_SPLIT]
-    train_idx = idx_list[n_samples*TEST_SPLIT:]
+    test_idx = idx_list[:int(n_samples*TEST_SPLIT)]
+    train_idx = idx_list[int(n_samples*TEST_SPLIT):]
     return X[train_idx,:,:,:], Y[train_idx,:], X[test_idx,:,:,:], Y[test_idx,:]
 
 
