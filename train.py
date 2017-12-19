@@ -19,7 +19,7 @@ TRAIN_DIR = '../find_phone'
 LABEL_FILE = '../find_phone/labels.txt'
 TEST_SPLIT = 0.1
 # VAL_DIR = '../data/validation'
-NUM_EPOCHS = 100
+NUM_EPOCHS = 500
 BATCH_SIZE = 16
 NUM_COORDS = 2
 TASK_NAME = 'fine_phone'
@@ -66,7 +66,6 @@ def process_image(image):
     return new_image
 
 
-
 def load_labels(file_path):
     f = open(file_path, 'rb')
     content = f.readlines()
@@ -81,6 +80,7 @@ def save_index(idx_list):
     f = open(INDEX_FILE, 'wb')
     for idx in idx_list:
         f.write(str(idx)+'\n')
+
 
 def partition_data(X, Y):
     """
