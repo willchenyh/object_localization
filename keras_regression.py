@@ -24,7 +24,7 @@ for i in range(100):
     print x[i,:], y[i,:]
 '''
 sgd = optimizers.SGD(lr=0.001)
-model.compile(loss='mean_squared_error', optimizer=sgd)
+model.compile(loss='mean_squared_error', optimizer=sgd, metrics=['mse'])
 model.fit(x, y, epochs=1000, validation_split=0.2)
 result = model.evaluate(x,y)
 print
