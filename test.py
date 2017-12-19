@@ -81,7 +81,7 @@ def load_data(src_path):
 
 def main():
     # load data
-    X_train, Y_train, X_test, Y_test = load_data(INDEX_FILE)
+    X_train, Y_train, X_test, Y_test = load_data(TRAIN_DIR)
 
     #load model
     model = load_model(MODEL_PATH)
