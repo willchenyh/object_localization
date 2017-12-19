@@ -93,6 +93,9 @@ def main():
     diff = predictions - Y_test
     dist = np.linalg.norm(diff, axis=1)
     print dist
+    num_correct = (dist <= RADIUS).sum()
+    num_incorrect = (dist > RADIUS).sum()
+    print num_correct, num_incorrect
 
 if __name__ == '__main__':
     main()
