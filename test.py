@@ -21,3 +21,20 @@ NUM_EPOCHS = 100
 BATCH_SIZE = 16
 NUM_COORDS = 2
 TASK_NAME = 'fine_phone'
+
+INDEX_FILE = 'index_file.txt'
+
+
+def load_index(index_file):
+    f = open(index_file, 'rb')
+    indices = f.readlines()
+    index_list = [int(idx.strip()) for idx in indices]
+    print index_list
+
+
+def main():
+    load_index(INDEX_FILE)
+
+
+if __name__ == '__main__':
+    main()

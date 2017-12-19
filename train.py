@@ -79,7 +79,7 @@ def load_labels(file_path):
 def save_index(idx_list):
     f = open(INDEX_FILE, 'wb')
     for idx in idx_list:
-    	f.write(str(idx)+'\n')
+        f.write(str(idx)+'\n')
 
 def partition_data(X, Y):
     """
