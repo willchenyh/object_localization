@@ -18,9 +18,10 @@ MEAN_PIXEL = np.array([104., 117., 123.]).reshape((1,1,3))
 TRAIN_DIR = '../find_phone'
 LABEL_FILE = '../find_phone/labels.txt'
 NUM_COORDS = 2
-TASK_NAME = 'fine_phone'
-TEST_SPLIT = 0.1
+RADIUS = 0.05
 
+
+TEST_SPLIT = 0.1
 INDEX_FILE = 'index_file.txt'
 MODEL_PATH = '../vgg16_fine_phone_weights.h5'
 
@@ -88,8 +89,10 @@ def main():
 
     # check results
     predictions = model.predict(x=X_test)
-    print predictions
-
+    # print predictions
+    diff = predictions - Y_test
+    dist = np.linalg.norm(diff, axis=1)
+    print dist
 
 if __name__ == '__main__':
     main()
