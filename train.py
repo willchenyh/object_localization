@@ -11,14 +11,15 @@ import numpy as np
 # import glob
 import os
 import cv2
-# import random
+import random
 
 IMG_H, IMG_W, NUM_CHANNELS = 224, 224, 3
 MEAN_PIXEL = np.array([104., 117., 123.]).reshape((1,1,3))
 TRAIN_DIR = '../find_phone'
 LABEL_FILE = '../find_phone/labels.txt'
+TEST_SPLIT = 0.1
 # VAL_DIR = '../data/validation'
-NUM_EPOCHS = 10
+NUM_EPOCHS = 100
 BATCH_SIZE = 16
 NUM_COORDS = 2
 TASK_NAME = 'fine_phone'
@@ -73,6 +74,21 @@ def load_labels(file_path):
     return label_dict
 
 
+def partition_data(X, Y):
+    """
+
+    :param X:
+    :param Y:
+    :return: train images, train labels, test images, test labels
+    """
+    n_samples = X.shape[0]
+    idx_list = range(n_samples)
+    random.shuffle(idx_list)
+    test_idx = idx_list[:n_samples*TEST_SPLIT]
+    train_idx = idx_list[n_samples*TEST_SPLIT:]
+    return X[train_idx,:,:,:], Y[train_idx,:], X[test_idx,:,:,:], Y[test_idx,:]
+
+
 def load_data(src_path):
 
     file_list = os.listdir(src_path)
@@ -92,7 +108,7 @@ def load_data(src_path):
 
         c1, c2 = label_dict[image_name]
         Y[i,0], Y[i,1] = c1, c2
-    return X, Y
+    return partition_data(X,Y)
 
 
 def main():
@@ -100,17 +116,21 @@ def main():
     model = load_model()
     print 'VGG16 created\n'
     # Get data
-    print 'Load train data:'
-    X_train, Y_train = load_data(TRAIN_DIR)
+    print 'Load data:'
+    X_train, Y_train, X_test, Y_test = load_data(TRAIN_DIR)
     # print 'Load val data:'
     # X_val, Y_val = load_data(VAL_DIR)
     # Train model
     model.fit(x=X_train, y=Y_train, batch_size=BATCH_SIZE, epochs=NUM_EPOCHS, validation_split=0.1)
     print '\n'
     # Save model weights
-    model.save('vgg16_{}_weights.h5'.format(TASK_NAME))
+    model.save('../vgg16_{}_weights.h5'.format(TASK_NAME))
     print 'model weights saved.'
-    return
+
+    # use model on test set
+    results = model.evaluate(X_test, Y_test)
+    print 'Test results:'
+    print results
 
 
 if __name__ == '__main__':
