@@ -37,7 +37,7 @@ def load_model():
     print 'Build model'
 
     # train only the top layers
-    for layer in model.layer[:15]:
+    for layer in model.layers[:15]:
         layer.trainable = False
 
     # compile the model
