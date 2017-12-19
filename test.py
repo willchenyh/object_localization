@@ -80,6 +80,14 @@ def load_data(src_path):
     return partition_data(X,Y)
 
 
+def compute_accuracy(predictions, gtruth):
+    diff = predictions - gtruth
+    dist = np.linalg.norm(diff, axis=1)
+    num_correct = (dist <= RADIUS).sum()
+    accuracy = float(num_correct) / predictions.shape[0]
+    return accuracy
+
+
 def main():
     # load data
     X_train, Y_train, X_test, Y_test = load_data(TRAIN_DIR)
@@ -88,14 +96,13 @@ def main():
     model = load_model(MODEL_PATH)
 
     # check results
-    predictions = model.predict(x=X_test)
-    # print predictions
-    diff = predictions - Y_test
-    dist = np.linalg.norm(diff, axis=1)
-    print dist
-    num_correct = (dist <= RADIUS).sum()
-    num_incorrect = (dist > RADIUS).sum()
-    print num_correct, num_incorrect
+    train_preds = model.predict(x=X_train)
+    ac = compute_accuracy(train_preds, Y_train)
+    print 'Train accuracy:', ac
+    test_preds = model.predict(x=X_test)
+    ac = compute_accuracy(test_preds, Y_test)
+    print 'Test accuracy:', ac
+
 
 if __name__ == '__main__':
     main()
