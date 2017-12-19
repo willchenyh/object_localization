@@ -66,6 +66,7 @@ def process_image(image):
     return new_image
 
 
+
 def load_labels(file_path):
     f = open(file_path, 'rb')
     content = f.readlines()
@@ -119,7 +120,6 @@ def load_data(src_path):
         c1, c2 = label_dict[image_name]
         Y[i,0], Y[i,1] = c1, c2
     return partition_data(X,Y)
-
 
 def main():
     # make model
