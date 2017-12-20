@@ -106,7 +106,7 @@ def partition_data(image_list):
 
 def draw_circle(image, cx, cy, image_path, code):
     # TODO: draw circle on phone and save file
-    temp = image.copy()
+    temp = image.copy() + MEAN_PIXEL
     cx = int(cx * IMG_W)
     cy = int(cy * IMG_H)
     cv2.circle(temp, (cx, cy), 20, (0,0,255), 1)
@@ -120,7 +120,7 @@ def augment(image_path, cx, cy):
     image = cv2.imread(image_path, 1)
     image = cv2.resize(image, (IMG_H, IMG_W))
     augmented = np.zeros((4, IMG_H, IMG_W, NUM_CHANNELS))
-    augmented[0,:,:,:] = image
+    augmented[0,:,:,:] = image - MEAN_PIXEL
     y = np.array([[cx, cy], [1-cx, cy], [cx, 1-cy], [1-cx, 1-cy]])
 
     # TODO: to test and save images with a drawn label
