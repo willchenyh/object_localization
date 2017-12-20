@@ -19,10 +19,10 @@ TRAIN_DIR = '../find_phone'
 LABEL_FILE = '../find_phone/labels.txt'
 TEST_SPLIT = 0.1
 # VAL_DIR = '../data/validation'
-NUM_EPOCHS = 500
+NUM_EPOCHS = 100
 BATCH_SIZE = 16
 NUM_COORDS = 2
-TASK_NAME = 'fine_phone'
+TASK_NAME = 'find_phone'
 
 INDEX_FILE = 'index_file.txt'
 
@@ -35,6 +35,7 @@ def load_model():
     flat = Flatten()(base_out)
     hidden = Dense(256, activation='relu')(flat)
     # drop = Dropout(0.5)(hidden)
+    hidden = Dense(32, activation='relu')(hidden)
     predictions = Dense(NUM_COORDS, activation='sigmoid')(hidden)
     model = Model(inputs=base_model.input, outputs=predictions)
     print 'Build model'
@@ -46,6 +47,7 @@ def load_model():
     # compile the model
     model.compile(optimizer=optimizers.SGD(lr=1e-4, momentum=0.9), loss='mean_squared_error', metrics=['mse'])
     print 'Compile model'
+    model.summary()
     return model
 
 
@@ -113,13 +115,16 @@ def load_data(src_path):
     for i, image_name in enumerate(image_name_list):
         image_path = os.path.join(src_path, image_name)
         image = cv2.imread(image_path, 1)
+        height, width, _ = image.shape
         #image = process_image(image)
         image = cv2.resize(image, (IMG_H, IMG_W)) - MEAN_PIXEL
         X[i, :, :, :] = image
 
+        # get coordinates and transform them based on shape
         c1, c2 = label_dict[image_name]
-        Y[i,0], Y[i,1] = c1, c2
+
     return partition_data(X,Y)
+
 
 def main():
     # make model

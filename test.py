@@ -23,7 +23,7 @@ RADIUS = 0.05
 
 TEST_SPLIT = 0.1
 INDEX_FILE = 'index_file.txt'
-MODEL_PATH = '../vgg16_fine_phone_weights.h5'
+MODEL_PATH = '../vgg16_find_phone_weights.h5'
 
 
 def load_index(index_file):
