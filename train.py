@@ -23,8 +23,10 @@ NUM_EPOCHS = 20
 BATCH_SIZE = 16
 NUM_COORDS = 2
 TASK_NAME = 'find_phone'
+RADIUS = 0.05
 
 INDEX_FILE = 'index_file.txt'
+CIRCLE_DIR = '../test_augmentation'
 
 
 def load_model():
@@ -95,23 +97,41 @@ def partition_data(image_list):
     # idx_list = range(n_samples)
     random.shuffle(image_list)
 
-    save_index(image_list)
+    # save_index(image_list)
 
     test_set = image_list[:int(n_samples*TEST_SPLIT)]
     train_set = image_list[int(n_samples*TEST_SPLIT):]
     return train_set, test_set
 
 
-def augment(image, cx, cy):
+def draw_circle(image, cx, cy, image_path, code):
+    # TODO: draw circle on phone and save file
+    temp = image.copy()
+    cv2.circle(temp, (cx, cy), 20, (0,0,255), 1)
+
+    orig_name = image_path.split('/')[-1]
+    cv2.imwrite(os.path.join(CIRCLE_DIR, orig_name+'_'+code+'.jpg'))
+    return
+
+
+def augment(image_path, cx, cy):
+    image = cv2.imread(image_path, 1)
     image = cv2.resize(image, (IMG_H, IMG_W))
     augmented = np.zeros((4, IMG_H, IMG_W, NUM_CHANNELS))
     augmented[0,:,:,:] = image
     y = np.array([[cx, cy], [1-cx, cy], [cx, 1-cy], [1-cx, 1-cy]])
-    flipcodes = [1, 0, -1]  # hor, ver, both
-    for i,fc in enumerate(flipcodes):
+
+    # TODO: to test and save images with a drawn label
+    draw_circle(image, cx, cy, image_path, '')
+
+    flip_codes = [1, 0, -1]  # hor, ver, both
+    for i,fc in enumerate(flip_codes):
         flipped = cv2.flip(image, fc)
         flipped = flipped - MEAN_PIXEL
         augmented[i+1,:,:,:] = flipped
+
+        # TODO: to test and save images with a drawn label
+        draw_circle(flipped, y[i+1, 0], y[i+1, 1], image_path, fc)
 
     return augmented, y
 
@@ -126,13 +146,12 @@ def read_images(image_name_list, src_path):
     label_dict = load_labels(LABEL_FILE)
     for i, image_name in enumerate(image_name_list):
         image_path = os.path.join(src_path, image_name)
-        image = cv2.imread(image_path, 1)
         # image = process_image(image)
 
-        # get coordinates and transform them based on shape
+        # get coordinates
         cx, cy = label_dict[image_name]
 
-        images_flp, lbs_flp = augment(image, cx, cy)
+        images_flp, lbs_flp = augment(image_path, cx, cy)
         images.append(images_flp)
         labels.append(lbs_flp)
 
@@ -147,11 +166,21 @@ def load_data(src_path):
     file_list = os.listdir(src_path)
     image_name_list = [fname for fname in file_list if fname.endswith('.jpg')]
     train_set, test_set = partition_data(image_name_list)
+
+    # read images into numpy arrays
     x_train, y_train = read_images(train_set, src_path)
     print 'train:', x_train.shape, y_train.shape
     x_test, y_test = read_images(test_set, src_path)
     print 'test:', x_test.shape, y_test.shape
     return x_train, y_train, x_test, y_test
+
+
+def compute_accuracy(predictions, gtruth):
+    diff = predictions - gtruth
+    dist = np.linalg.norm(diff, axis=1)
+    num_correct = (dist <= RADIUS).sum()
+    accuracy = float(num_correct) / predictions.shape[0]
+    return accuracy, dist
 
 
 def main():
@@ -174,6 +203,15 @@ def main():
     results = model.evaluate(x_test, y_test)
     print 'Test results:'
     print results[0]
+
+    # check results
+    train_preds = model.predict(x=x_train)
+    ac, error = compute_accuracy(train_preds, y_train)
+    print 'Train accuracy:', ac
+    test_preds = model.predict(x=x_test)
+    ac, error = compute_accuracy(test_preds, y_test)
+    print 'Test accuracy:', ac
+    print error
 
 
 if __name__ == '__main__':
