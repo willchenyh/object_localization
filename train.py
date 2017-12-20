@@ -36,9 +36,10 @@ def load_model():
     base_out = base_model.output
     flat = Flatten()(base_out)
     hidden = Dense(4096, activation='relu')(flat)
-    hidden = Dense(256, activation='relu')(hidden)
+    hidden = Dense(4096, activation='relu')(hidden)
+    # hidden = Dense(256, activation='relu')(hidden)
     # drop = Dropout(0.5)(hidden)
-    hidden = Dense(32, activation='relu')(hidden)
+    # hidden = Dense(32, activation='relu')(hidden)
     predictions = Dense(NUM_COORDS, activation='sigmoid')(hidden)
     model = Model(inputs=base_model.input, outputs=predictions)
     print 'Build model'
@@ -126,16 +127,16 @@ def augment(image_path, cx, cy):
     y = np.array([[cx, cy], [1-cx, cy], [cx, 1-cy], [1-cx, 1-cy]])
 
     # TODO: to test and save images with a drawn label
-    draw_circle(image, cx, cy, image_path, '')
+    draw_circle(orig, cx, cy, image_path, '')
 
     flip_codes = [1, 0, -1]  # hor, ver, both
     for i,fc in enumerate(flip_codes):
         flipped = cv2.flip(image, fc)
-        flipped = flipped - MEAN_PIXEL
-        augmented[i+1,:,:,:] = flipped
+        flipped_norm = flipped - MEAN_PIXEL
+        augmented[i+1,:,:,:] = flipped_norm
 
         # TODO: to test and save images with a drawn label
-        draw_circle(flipped, y[i+1, 0], y[i+1, 1], image_path, str(fc))
+        draw_circle(flipped_norm, y[i+1, 0], y[i+1, 1], image_path, str(fc))
 
     return augmented, y
 
@@ -187,6 +188,15 @@ def compute_accuracy(predictions, gtruth):
     return accuracy, dist
 
 
+def visualize_test(x_test, y_preds):
+    for i in range(x_test.shape[0]):
+        img = x_test[i,:,:,:]
+        # cx_lb, cy_lb = y_test[i,0], y_test[i,1]
+        cx_pred, cy_pred = y_preds[i,0], y_preds[i,1]
+        draw_circle(img, cx_pred, cy_pred, '/test_'+str(i), '')
+    return
+
+
 def main():
     # make model
     model = load_model()
@@ -222,6 +232,7 @@ def main():
     print 'Test accuracy:', ac
     mse_test = MSE(y_test, test_preds)
     print 'Test MSE:', mse_test
+    visualize_test(x_test, test_preds)
     print error
 
 
