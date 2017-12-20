@@ -131,7 +131,7 @@ def augment(image_path, cx, cy):
         augmented[i+1,:,:,:] = flipped
 
         # TODO: to test and save images with a drawn label
-        draw_circle(flipped, y[i+1, 0], y[i+1, 1], image_path, str(fc))
+        draw_circle(flipped, int(y[i+1, 0]), int(y[i+1, 1]), image_path, str(fc))
 
     return augmented, y
 
