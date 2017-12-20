@@ -35,7 +35,8 @@ def load_model():
     print('Model weights loaded.')
     base_out = base_model.output
     flat = Flatten()(base_out)
-    hidden = Dense(256, activation='relu')(flat)
+    hidden = Dense(4096, activation='relu')(flat)
+    hidden = Dense(256, activation='relu')(hidden)
     # drop = Dropout(0.5)(hidden)
     hidden = Dense(32, activation='relu')(hidden)
     predictions = Dense(NUM_COORDS, activation='sigmoid')(hidden)
@@ -120,7 +121,8 @@ def augment(image_path, cx, cy):
     image = cv2.imread(image_path, 1)
     image = cv2.resize(image, (IMG_H, IMG_W))
     augmented = np.zeros((4, IMG_H, IMG_W, NUM_CHANNELS))
-    augmented[0,:,:,:] = image - MEAN_PIXEL
+    orig = image - MEAN_PIXEL
+    augmented[0,:,:,:] = orig
     y = np.array([[cx, cy], [1-cx, cy], [cx, 1-cy], [1-cx, 1-cy]])
 
     # TODO: to test and save images with a drawn label
@@ -207,12 +209,19 @@ def main():
     print results[0]
 
     # check results
+    from sklearn.metrics import mean_squared_error as MSE
+
     train_preds = model.predict(x=x_train)
     ac, error = compute_accuracy(train_preds, y_train)
     print 'Train accuracy:', ac
+    mse_train = MSE(y_train, train_preds)
+    print 'Train MSE:', mse_train
+
     test_preds = model.predict(x=x_test)
     ac, error = compute_accuracy(test_preds, y_test)
     print 'Test accuracy:', ac
+    mse_test = MSE(y_test, test_preds)
+    print 'Test MSE:', mse_test
     print error
 
 
