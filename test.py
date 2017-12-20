@@ -39,7 +39,7 @@ def load_labels(file_path):
     label_dict = {}
     for label in content:
         label_parts = label.strip().split(' ')
-        label_dict[label_parts[0]] = (label_parts[1], label_parts[2])
+        label_dict[label_parts[0]] = (float(label_parts[1]), float(label_parts[2]))
     return label_dict
 
 
