@@ -107,10 +107,12 @@ def partition_data(image_list):
 def draw_circle(image, cx, cy, image_path, code):
     # TODO: draw circle on phone and save file
     temp = image.copy()
+    cx = int(cx * IMG_W)
+    cy = int(cy * IMG_H)
     cv2.circle(temp, (cx, cy), 20, (0,0,255), 1)
 
     orig_name = image_path.split('/')[-1]
-    cv2.imwrite(os.path.join(CIRCLE_DIR, orig_name+'_'+code+'.jpg'))
+    cv2.imwrite(os.path.join(CIRCLE_DIR, orig_name+'_'+code+'.jpg'), temp)
     return
 
 
@@ -131,7 +133,7 @@ def augment(image_path, cx, cy):
         augmented[i+1,:,:,:] = flipped
 
         # TODO: to test and save images with a drawn label
-        draw_circle(flipped, int(y[i+1, 0]), int(y[i+1, 1]), image_path, str(fc))
+        draw_circle(flipped, y[i+1, 0], y[i+1, 1], image_path, str(fc))
 
     return augmented, y
 
