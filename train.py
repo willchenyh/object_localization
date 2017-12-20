@@ -122,7 +122,7 @@ def load_data(src_path):
 
         # get coordinates and transform them based on shape
         c1, c2 = label_dict[image_name]
-
+        Y[i, 0], Y[i, 1] = c1, c2
     return partition_data(X,Y)
 
 
