@@ -19,7 +19,7 @@ TRAIN_DIR = '../find_phone'
 LABEL_FILE = '../find_phone/labels.txt'
 TEST_SPLIT = 0.1
 # VAL_DIR = '../data/validation'
-NUM_EPOCHS = 20
+NUM_EPOCHS = 100
 BATCH_SIZE = 16
 NUM_COORDS = 2
 TASK_NAME = 'find_phone'
@@ -49,7 +49,7 @@ def load_model():
         layer.trainable = False
 
     # compile the model
-    model.compile(optimizer=optimizers.SGD(lr=1e-4, momentum=0.9), loss='mean_squared_error', metrics=['mse'])
+    model.compile(optimizer=optimizers.SGD(lr=1e-5, momentum=0.9), loss='mean_squared_error', metrics=['mse'])
     print 'Compile model'
     model.summary()
     return model
