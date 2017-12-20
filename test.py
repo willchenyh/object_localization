@@ -52,13 +52,14 @@ def get_partitions():
 
 
 def augment(image, cx, cy):
+    image = cv2.resize(image, (IMG_H, IMG_W))
     augmented = np.zeros((4, IMG_H, IMG_W, NUM_CHANNELS))
     augmented[0,:,:,:] = image
     y = np.array([[cx, cy], [1-cx, cy], [cx, 1-cy], [1-cx, 1-cy]])
     flipcodes = [1, 0, -1]  # hor, ver, both
     for i,fc in enumerate(flipcodes):
         flipped = cv2.flip(image, fc)
-        flipped = cv2.resize(flipped, (IMG_H, IMG_W)) - MEAN_PIXEL
+        flipped = flipped - MEAN_PIXEL
         augmented[i+1,:,:,:] = flipped
 
     return augmented, y
