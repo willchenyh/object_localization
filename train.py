@@ -68,6 +68,12 @@ def process_image(image):
     return new_image
 
 
+def save_index(idx_list):
+    f = open(INDEX_FILE, 'wb')
+    for fname in idx_list:
+        f.write(str(fname)+'\n')
+
+
 def load_labels(file_path):
     f = open(file_path, 'rb')
     content = f.readlines()
@@ -78,52 +84,73 @@ def load_labels(file_path):
     return label_dict
 
 
-def save_index(idx_list):
-    f = open(INDEX_FILE, 'wb')
-    for idx in idx_list:
-        f.write(str(idx)+'\n')
-
-
-def partition_data(X, Y):
+def partition_data(image_list):
     """
-
+    partition sets using the image name list
     :param X:
     :param Y:
-    :return: train images, train labels, test images, test labels
+    :return: training set list, test set list (both with image names)
     """
-    n_samples = X.shape[0]
-    idx_list = range(n_samples)
-    random.shuffle(idx_list)
+    n_samples = len(image_list)
+    # idx_list = range(n_samples)
+    random.shuffle(image_list)
 
-    save_index(idx_list)
+    save_index(image_list)
 
-    test_idx = idx_list[:int(n_samples*TEST_SPLIT)]
-    train_idx = idx_list[int(n_samples*TEST_SPLIT):]
-    return X[train_idx,:,:,:], Y[train_idx,:], X[test_idx,:,:,:], Y[test_idx,:]
+    test_set = image_list[:int(n_samples*TEST_SPLIT)]
+    train_set = image_list[int(n_samples*TEST_SPLIT):]
+    return train_set, test_set
 
 
-def load_data(src_path):
+def augment(image, cx, cy):
+    augmented = np.zeros((4, IMG_H, IMG_W, NUM_CHANNELS))
+    augmented[0,:,:,:] = image
+    y = np.array([[cx, cy], [1-cx, cy], [cx, 1-cy], [1-cx, 1-cy]])
+    flipcodes = [1, 0, -1]  # hor, ver, both
+    for i,fc in enumerate(flipcodes):
+        flipped = cv2.flip(image, fc)
+        flipped = cv2.resize(flipped, (IMG_H, IMG_W)) - MEAN_PIXEL
+        augmented[i+1,:,:,:] = flipped
 
-    file_list = os.listdir(src_path)
-    image_name_list = [fname for fname in file_list if fname.endswith('.jpg')]
+    return augmented, y
+
+
+def read_images(image_name_list, src_path):
     num_images = len(image_name_list)
     print '-- This set has {} images.'.format(num_images)
-    X = np.zeros((num_images, IMG_H, IMG_W, NUM_CHANNELS))
-    Y = np.zeros((num_images, 2))
+
     # read images and labels
+    images = []
+    labels = []
     label_dict = load_labels(LABEL_FILE)
     for i, image_name in enumerate(image_name_list):
         image_path = os.path.join(src_path, image_name)
         image = cv2.imread(image_path, 1)
-        height, width, _ = image.shape
-        #image = process_image(image)
-        image = cv2.resize(image, (IMG_H, IMG_W)) - MEAN_PIXEL
-        X[i, :, :, :] = image
+        # image = process_image(image)
 
         # get coordinates and transform them based on shape
-        c1, c2 = label_dict[image_name]
-        Y[i, 0], Y[i, 1] = c1, c2
-    return partition_data(X,Y)
+        cx, cy = label_dict[image_name]
+
+        images_flp, lbs_flp = augment(image, cx, cy)
+        images.append(images_flp)
+        labels.append(lbs_flp)
+
+    x = np.concatenate(tuple(images), axis=0)
+    y = np.concatenate(tuple(labels), axis=0)
+    return x, y
+
+
+def load_data(src_path):
+
+    # get list of image names and partition into train and test sets
+    file_list = os.listdir(src_path)
+    image_name_list = [fname for fname in file_list if fname.endswith('.jpg')]
+    train_set, test_set = partition_data(image_name_list)
+    x_train, y_train = read_images(train_set, src_path)
+    print 'train:', x_train.shape, y_train.shape
+    x_test, y_test = read_images(test_set, src_path)
+    print 'test:', x_test.shape, y_test.shape
+    return x_train, y_train, x_test, y_test
 
 
 def main():
@@ -132,20 +159,20 @@ def main():
     print 'VGG16 created\n'
     # Get data
     print 'Load data:'
-    X_train, Y_train, X_test, Y_test = load_data(TRAIN_DIR)
+    x_train, y_train, x_test, y_test = load_data(TRAIN_DIR)
     # print 'Load val data:'
     # X_val, Y_val = load_data(VAL_DIR)
     # Train model
-    model.fit(x=X_train, y=Y_train, batch_size=BATCH_SIZE, epochs=NUM_EPOCHS, validation_split=0.1)
+    model.fit(x=x_train, y=y_train, batch_size=BATCH_SIZE, epochs=NUM_EPOCHS, validation_split=0.1)
     print '\n'
     # Save model weights
     model.save('../vgg16_{}_weights.h5'.format(TASK_NAME))
     print 'model weights saved.'
 
     # use model on test set
-    results = model.evaluate(X_test, Y_test)
+    results = model.evaluate(x_test, y_test)
     print 'Test results:'
-    print results
+    print results[0]
 
 
 if __name__ == '__main__':
