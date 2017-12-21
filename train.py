@@ -142,9 +142,9 @@ def augment(image_path, cx, cy):
     # x_augmented[0,:,:,:] = img
     y_augmented = np.array([[cx, cy], [1-cx, cy], [cx, 1-cy], [1-cx, 1-cy]])
 
-    img_lr = np.fliplr(img)
-    img_ud = np.flipud(img)
-    img_lrud = np.flipud(img_lr)
+    img_lr = image.flip_axis(img, 2)
+    img_ud = image.flip_axis(img, 1)
+    img_lrud = image.flip_axis(img_lr, 1)
     x_augmented = np.concatenate((img,img_lr,img_ud,img_lrud), axis=0)
 
     # flip_codes = [1, 0, -1]  # hor, ver, both
