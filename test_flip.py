@@ -24,10 +24,13 @@ x = np.expand_dims(x, axis=0)
 print 'x ,', x_hor.shape
 
 x_hor = image.flip_axis(x, 2)
+cv2.imwrite('ele_hor.jpg', x_hor[0,:,:,:])
 print 'x hor,', x_hor.shape
 
 x_ver = image.flip_axis(x, 1)
+cv2.imwrite('ele_ver.jpg', x_ver[0,:,:,:])
 print 'x ver,', x_ver.shape
 
 x_horver = image.flip_axis(x_hor, 1)
+cv2.imwrite('ele_horver.jpg', x_horver[0,:,:,:])
 print 'x horver', x_horver.shape
