@@ -1,6 +1,7 @@
 from keras.models import Model
 from keras.applications.vgg16 import VGG16
 from keras.applications.xception import Xception
+from keras.applications.inception_resnet_v2 import InceptionResNetV2
 from keras import optimizers
 from keras.layers import Dropout, Flatten, Dense, GlobalAveragePooling2D
 
@@ -49,6 +50,30 @@ def load_xception():
     # x = GlobalAveragePooling2D()(base_out)
     x = Dense(2048, activation='relu')(base_out)
     x = Dense(256, activation='relu')(x)
+    predictions = Dense(NUM_COORDS, activation='sigmoid')(x)
+    model = Model(inputs=base_model.input, outputs=predictions)
+    print 'Build model'
+
+    # train only the top layers
+    for layer in base_model.layers:
+        layer.trainable = False
+
+    # compile the model
+    model.compile(optimizer=optimizers.SGD(lr=1e-3, momentum=0.9), loss='mean_squared_error', metrics=['mse'])
+    print 'Compile model'
+    model.summary()
+    return model
+
+
+def load_incep_res():
+    IMG_H, IMG_W, NUM_CHANNELS = 299, 299, 3
+    base_model = InceptionResNetV2(include_top=False, weights='imagenet', input_shape=(IMG_H, IMG_W, NUM_CHANNELS),
+                          pooling='avg')
+    print('Model weights loaded.')
+    base_out = base_model.output
+    # x = GlobalAveragePooling2D()(base_out)
+    x = Dense(2048, activation='relu')(base_out)
+    # x = Dense(256, activation='relu')(x)
     predictions = Dense(NUM_COORDS, activation='sigmoid')(x)
     model = Model(inputs=base_model.input, outputs=predictions)
     print 'Build model'
