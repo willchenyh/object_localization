@@ -2,18 +2,20 @@
 Author: Yuhan (Will) Chen
 """
 
-from keras.models import Model
-from keras.applications.vgg16 import VGG16
-from keras import optimizers
-from keras.layers import Dropout, Flatten, Dense
+# from keras.models import Model
+# from keras.applications.vgg16 import VGG16
+# from keras import optimizers
+# from keras.layers import Dropout, Flatten, Dense
 # from keras.utils.np_utils import to_categorical
+from load_model import load_model
 import numpy as np
 # import glob
 import os
 import cv2
 import random
 
-IMG_H, IMG_W, NUM_CHANNELS = 224, 224, 3
+# IMG_H, IMG_W, NUM_CHANNELS = 224, 224, 3
+IMG_H, IMG_W, NUM_CHANNELS = 299, 299, 3
 MEAN_PIXEL = np.array([104., 117., 123.]).reshape((1,1,3))
 TRAIN_DIR = '../find_phone'
 LABEL_FILE = '../find_phone/labels.txt'
@@ -28,7 +30,7 @@ RADIUS = 0.05
 INDEX_FILE = 'index_file.txt'
 CIRCLE_DIR = '../test_augmentation'
 
-
+'''
 def load_model():
     # build the VGG16 network
     base_model = VGG16(weights='imagenet', include_top=False, input_shape=(IMG_H, IMG_W, NUM_CHANNELS))
@@ -53,7 +55,7 @@ def load_model():
     print 'Compile model'
     model.summary()
     return model
-
+'''
 
 def process_image(image):
     # zero pad 5-pixel boundary
@@ -199,7 +201,7 @@ def visualize_test(x_test, y_preds):
 
 def main():
     # make model
-    model = load_model()
+    model = load_model('xception')
     print 'VGG16 created\n'
     # Get data
     print 'Load data:'
