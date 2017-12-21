@@ -47,7 +47,7 @@ def load_xception():
     print('Model weights loaded.')
     base_out = base_model.output
     x = GlobalAveragePooling2D()(base_out)
-    # x = Dense(2048, activation='sigmoid')(x)
+    x = Dense(2048, activation='sigmoid')(x)
     predictions = Dense(NUM_COORDS, activation='sigmoid')(x)
     model = Model(inputs=base_model.input, outputs=predictions)
     print 'Build model'
