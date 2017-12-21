@@ -46,8 +46,9 @@ def load_xception():
     base_model = Xception(include_top=False, weights='imagenet', input_shape=(IMG_H,IMG_W,NUM_CHANNELS))
     print('Model weights loaded.')
     base_out = base_model.output
-    pool = GlobalAveragePooling2D(name='avg_pool')(base_out)
-    predictions = Dense(NUM_COORDS, activation='sigmoid')(pool)
+    x = GlobalAveragePooling2D()(base_out)
+    # x = Dense(2048, activation='sigmoid')(x)
+    predictions = Dense(NUM_COORDS, activation='sigmoid')(x)
     model = Model(inputs=base_model.input, outputs=predictions)
     print 'Build model'
 
@@ -56,7 +57,7 @@ def load_xception():
         layer.trainable = False
 
     # compile the model
-    model.compile(optimizer=optimizers.SGD(lr=1e-5, momentum=0.9), loss='mean_squared_error', metrics=['mse'])
+    model.compile(optimizer=optimizers.SGD(lr=1e-4, momentum=0.9), loss='mean_squared_error', metrics=['mse'])
     print 'Compile model'
     model.summary()
     return model
