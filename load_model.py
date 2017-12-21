@@ -43,12 +43,12 @@ def load_vgg16():
 
 def load_xception():
     IMG_H, IMG_W, NUM_CHANNELS = 299, 299, 3
-    base_model = Xception(include_top=False, weights='imagenet', input_shape=(IMG_H,IMG_W,NUM_CHANNELS))
+    base_model = Xception(include_top=False, weights='imagenet', input_shape=(IMG_H,IMG_W,NUM_CHANNELS), pooling='max')
     print('Model weights loaded.')
     base_out = base_model.output
-    x = GlobalAveragePooling2D()(base_out)
-    # x = Dense(2048, activation='relu')(x)
-    x = Dense(2048, activation='relu')(x)
+    # x = GlobalAveragePooling2D()(base_out)
+    x = Dense(2048, activation='relu')(base_out)
+    x = Dense(256, activation='relu')(x)
     predictions = Dense(NUM_COORDS, activation='sigmoid')(x)
     model = Model(inputs=base_model.input, outputs=predictions)
     print 'Build model'
