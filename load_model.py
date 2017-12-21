@@ -24,12 +24,12 @@ def load_vgg16():
     print('Model weights loaded.')
     base_out = base_model.output
     flat = Flatten()(base_out)
-    hidden = Dense(4096, activation='relu')(flat)
-    hidden = Dense(4096, activation='relu')(hidden)
+    x = Dense(4096, activation='relu')(flat)
+    x = Dense(4096, activation='relu')(x)
     # hidden = Dense(256, activation='relu')(hidden)
     # drop = Dropout(0.5)(hidden)
     # hidden = Dense(32, activation='relu')(hidden)
-    predictions = Dense(NUM_COORDS, activation='sigmoid')(hidden)
+    predictions = Dense(NUM_COORDS, activation='sigmoid')(x)
     model = Model(inputs=base_model.input, outputs=predictions)
     print 'Build model'
 
@@ -38,7 +38,7 @@ def load_vgg16():
         layer.trainable = False
 
     # compile the model
-    model.compile(optimizer=optimizers.SGD(lr=1e-5, momentum=0.9), loss='mean_squared_error', metrics=['mse'])
+    model.compile(optimizer=optimizers.SGD(lr=1e-4, momentum=0.9), loss='mean_squared_error', metrics=['mse'])
     print 'Compile model'
     model.summary()
     return model

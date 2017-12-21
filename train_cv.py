@@ -2,11 +2,7 @@
 Author: Yuhan (Will) Chen
 """
 
-# from keras.models import Model
-# from keras.applications.vgg16 import VGG16
-# from keras import optimizers
-# from keras.layers import Dropout, Flatten, Dense
-# from keras.utils.np_utils import to_categorical
+
 from load_model import load_model
 from keras.preprocessing import image
 
@@ -44,32 +40,6 @@ RADIUS = 0.05
 INDEX_FILE = 'index_file.txt'
 CIRCLE_DIR = '../test_augmentation'
 
-'''
-def load_model():
-    # build the VGG16 network
-    base_model = VGG16(weights='imagenet', include_top=False, input_shape=(IMG_H, IMG_W, NUM_CHANNELS))
-    print('Model weights loaded.')
-    base_out = base_model.output
-    flat = Flatten()(base_out)
-    hidden = Dense(4096, activation='relu')(flat)
-    hidden = Dense(4096, activation='relu')(hidden)
-    # hidden = Dense(256, activation='relu')(hidden)
-    # drop = Dropout(0.5)(hidden)
-    # hidden = Dense(32, activation='relu')(hidden)
-    predictions = Dense(NUM_COORDS, activation='sigmoid')(hidden)
-    model = Model(inputs=base_model.input, outputs=predictions)
-    print 'Build model'
-
-    # train only the top layers
-    for layer in model.layers[:19]:
-        layer.trainable = False
-
-    # compile the model
-    model.compile(optimizer=optimizers.SGD(lr=1e-4, momentum=0.9), loss='mean_squared_error', metrics=['mse'])
-    print 'Compile model'
-    model.summary()
-    return model
-'''
 
 def process_image(image):
     # zero pad 5-pixel boundary
@@ -135,11 +105,15 @@ def draw_circle(image, cx, cy, image_path, code):
 
 
 def augment(image_path, cx, cy):
-    # image = cv2.imread(image_path, 1)
-    # image = cv2.resize(image, (IMG_H, IMG_W))
 
-    orig = image.load_img(image_path, target_size=(IMG_H, IMG_H))
-    orig = image.img_to_array(orig)
+    # load RGB image
+    orig = cv2.imread(image_path, 1)
+    orig = cv2.resize(orig, (IMG_H, IMG_W))
+    orig = orig[:,:,[2,1,0]]
+
+    # orig = image.load_img(image_path, target_size=(IMG_H, IMG_H))
+    # orig = image.img_to_array(orig)
+
     img = np.expand_dims(orig, axis=0)
     img = preprocess_input(img)
 
