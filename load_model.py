@@ -35,7 +35,7 @@ def load_vgg16():
         layer.trainable = False
 
     # compile the model
-    model.compile(optimizer=optimizers.SGD(lr=1e-4, momentum=0.9), loss='mean_squared_error', metrics=['mse'])
+    model.compile(optimizer=optimizers.SGD(lr=1e-5, momentum=0.9), loss='mean_squared_error', metrics=['mse'])
     print 'Compile model'
     model.summary()
     return model
