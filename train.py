@@ -20,14 +20,14 @@ import random
 # from keras.applications.xception import preprocess_input
 # IMG_H, IMG_W, NUM_CHANNELS = 299, 299, 3
 
-# specific to inceptionResNetV2
-from keras.applications.inception_resnet_v2 import preprocess_input
-IMG_H, IMG_W, NUM_CHANNELS = 299, 299, 3
-MODEL_NAME = 'inception_resnet_v2'
+# # specific to inceptionResNetV2
+# from keras.applications.inception_resnet_v2 import preprocess_input
+# IMG_H, IMG_W, NUM_CHANNELS = 299, 299, 3
+# MODEL_NAME = 'inception_resnet_v2'
 
-# # specific to vgg16
-# from keras.applications.vgg16 import preprocess_input
-# IMG_H, IMG_W, NUM_CHANNELS = 224, 224, 3
+# specific to vgg16
+from keras.applications.vgg16 import preprocess_input
+IMG_H, IMG_W, NUM_CHANNELS = 224, 224, 3
 
 # MEAN_PIXEL = np.array([104., 117., 123.]).reshape((1,1,3))
 TRAIN_DIR = '../find_phone'
