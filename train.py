@@ -16,15 +16,16 @@ import os
 import cv2
 import random
 
-# specific to xception
-from keras.applications.xception import preprocess_input
-IMG_H, IMG_W, NUM_CHANNELS = 299, 299, 3
+# # specific to xception
+# from keras.applications.xception import preprocess_input
+# IMG_H, IMG_W, NUM_CHANNELS = 299, 299, 3
 
 # specific to inceptionResNetV2
-# from keras.applications.inception_resnet_v2 import preprocess_input
+from keras.applications.inception_resnet_v2 import preprocess_input
 IMG_H, IMG_W, NUM_CHANNELS = 299, 299, 3
+MODEL_NAME = 'inception_resnet_v2'
 
-# specific to vgg16
+# # specific to vgg16
 # from keras.applications.vgg16 import preprocess_input
 # IMG_H, IMG_W, NUM_CHANNELS = 224, 224, 3
 
@@ -225,9 +226,8 @@ def visualize_test(x_test, y_preds):
 
 def main():
     # make model
-    model_name = 'xception'
-    model = load_model(model_name)
-    print model_name, 'created\n'
+    model = load_model(MODEL_NAME)
+    print MODEL_NAME, 'created\n'
     # Get data
     print 'Load data:'
     x_train, y_train, x_test, y_test = load_data(TRAIN_DIR)

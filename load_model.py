@@ -13,6 +13,8 @@ def load_model(model_name):
         return load_vgg16()
     if model_name == 'xception':
         return load_xception()
+    if model_name == 'inception_resnet_v2':
+        return load_incep_res()
 
 
 def load_vgg16():
