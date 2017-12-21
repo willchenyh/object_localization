@@ -1,4 +1,4 @@
-rom keras.models import Model
+from keras.models import Model
 from keras.applications.vgg16 import VGG16
 from keras.applications.xception import Xception
 from keras import optimizers
