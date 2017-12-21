@@ -2,8 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="47f9c7af-eaaa-4286-9870-7da185d04bf5" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/load_model.py" afterPath="$PROJECT_DIR$/load_model.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/train.py" afterPath="$PROJECT_DIR$/train.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/train_cv.py" afterPath="$PROJECT_DIR$/train_cv.py" />
     </list>
     <ignored path="$PROJECT_DIR$/.idea/" />
@@ -31,8 +29,8 @@
       <file leaf-file-name="train_cv.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/train_cv.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="272">
-              <caret line="112" column="0" lean-forward="true" selection-start-line="112" selection-start-column="0" selection-end-line="112" selection-end-column="0" />
+            <state relative-caret-position="221">
+              <caret line="109" column="54" lean-forward="true" selection-start-line="109" selection-start-column="54" selection-end-line="109" selection-end-column="54" />
               <folding>
                 <element signature="e#36#69#0" expanded="true" />
               </folding>
@@ -270,8 +268,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/train_cv.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="272">
-          <caret line="112" column="0" lean-forward="true" selection-start-line="112" selection-start-column="0" selection-end-line="112" selection-end-column="0" />
+        <state relative-caret-position="221">
+          <caret line="109" column="54" lean-forward="true" selection-start-line="109" selection-start-column="54" selection-end-line="109" selection-end-column="54" />
           <folding>
             <element signature="e#36#69#0" expanded="true" />
           </folding>

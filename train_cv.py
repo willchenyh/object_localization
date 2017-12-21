@@ -107,7 +107,7 @@ def draw_circle(image, cx, cy, image_path, code):
 def augment(image_path, cx, cy):
 
     # load RGB image
-    orig = cv2.imread(image_path, 1)
+    orig = cv2.imread(image_path, 1).astype('float64')
     orig = cv2.resize(orig, (IMG_H, IMG_W))
     orig = orig[:,:,[2,1,0]]
 
