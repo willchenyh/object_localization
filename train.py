@@ -8,15 +8,23 @@ Author: Yuhan (Will) Chen
 # from keras.layers import Dropout, Flatten, Dense
 # from keras.utils.np_utils import to_categorical
 from load_model import load_model
+from keras.preprocessing import image
+
 import numpy as np
 # import glob
 import os
 import cv2
 import random
 
-# IMG_H, IMG_W, NUM_CHANNELS = 224, 224, 3
+# specific to xception
+from keras.applications.xception import preprocess_input
 IMG_H, IMG_W, NUM_CHANNELS = 299, 299, 3
-MEAN_PIXEL = np.array([104., 117., 123.]).reshape((1,1,3))
+
+
+# specific to vgg16
+# IMG_H, IMG_W, NUM_CHANNELS = 224, 224, 3
+
+# MEAN_PIXEL = np.array([104., 117., 123.]).reshape((1,1,3))
 TRAIN_DIR = '../find_phone'
 LABEL_FILE = '../find_phone/labels.txt'
 TEST_SPLIT = 0.1
@@ -110,7 +118,7 @@ def partition_data(image_list):
 
 def draw_circle(image, cx, cy, image_path, code):
     # TODO: draw circle on phone and save file
-    temp = image.copy() + MEAN_PIXEL
+    temp = image.copy()
     cx = int(cx * IMG_W)
     cy = int(cy * IMG_H)
     cv2.circle(temp, (cx, cy), 20, (0,0,255), 1)
@@ -121,26 +129,38 @@ def draw_circle(image, cx, cy, image_path, code):
 
 
 def augment(image_path, cx, cy):
-    image = cv2.imread(image_path, 1)
-    image = cv2.resize(image, (IMG_H, IMG_W))
-    augmented = np.zeros((4, IMG_H, IMG_W, NUM_CHANNELS))
-    orig = image - MEAN_PIXEL
-    augmented[0,:,:,:] = orig
-    y = np.array([[cx, cy], [1-cx, cy], [cx, 1-cy], [1-cx, 1-cy]])
+    # image = cv2.imread(image_path, 1)
+    # image = cv2.resize(image, (IMG_H, IMG_W))
+
+    orig = image.load_img(image_path, target_size=(IMG_H, IMG_H))
+    orig = image.img_to_array(orig)
+    img = np.expand_dims(orig, axis=0)
+    img = preprocess_input(img)
+
+    # x_augmented = np.zeros((4, IMG_H, IMG_W, NUM_CHANNELS))
+    # orig = image - MEAN_PIXEL
+    # x_augmented[0,:,:,:] = img
+    y_augmented = np.array([[cx, cy], [1-cx, cy], [cx, 1-cy], [1-cx, 1-cy]])
+
+    img_lr = np.fliplr(img)
+    img_ud = np.flipud(img)
+    img_lrud = np.flipud(img_lr)
+    x_augmented = np.concatenate((img,img_lr,img_ud,img_lrud), axis=0)
+
+    # flip_codes = [1, 0, -1]  # hor, ver, both
+    # for i,fc in enumerate(flip_codes):
+    #     flipped = cv2.flip(image, fc)
+    #     flipped_norm = flipped - MEAN_PIXEL
+    #     augmented[i+1,:,:,:] = flipped_norm
+    #
+    #     # TODO: to test and save images with a drawn label
+    #     draw_circle(flipped_norm, y[i+1, 0], y[i+1, 1], image_path, str(fc))
 
     # TODO: to test and save images with a drawn label
     draw_circle(orig, cx, cy, image_path, '')
+    # draw_circle(img_lr, cx, cy, image_path, '')
 
-    flip_codes = [1, 0, -1]  # hor, ver, both
-    for i,fc in enumerate(flip_codes):
-        flipped = cv2.flip(image, fc)
-        flipped_norm = flipped - MEAN_PIXEL
-        augmented[i+1,:,:,:] = flipped_norm
-
-        # TODO: to test and save images with a drawn label
-        draw_circle(flipped_norm, y[i+1, 0], y[i+1, 1], image_path, str(fc))
-
-    return augmented, y
+    return x_augmented, y_augmented
 
 
 def read_images(image_name_list, src_path):
@@ -201,8 +221,9 @@ def visualize_test(x_test, y_preds):
 
 def main():
     # make model
-    model = load_model('xception')
-    print 'VGG16 created\n'
+    model_name = 'xception'
+    model = load_model(model_name)
+    print model_name, 'created\n'
     # Get data
     print 'Load data:'
     x_train, y_train, x_test, y_test = load_data(TRAIN_DIR)
