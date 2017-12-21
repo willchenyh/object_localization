@@ -1,7 +1,7 @@
 from keras.models import Model
 from keras.applications.vgg16 import VGG16
 from keras.applications.xception import Xception
-from keras.applications.inception_resnet_v2 import InceptionResNetV2
+# from keras.applications.inception_resnet_v2 import InceptionResNetV2
 from keras import optimizers
 from keras.layers import Dropout, Flatten, Dense, GlobalAveragePooling2D
 
@@ -66,7 +66,7 @@ def load_xception():
     model.summary()
     return model
 
-
+"""
 def load_incep_res():
     IMG_H, IMG_W, NUM_CHANNELS = 299, 299, 3
     base_model = InceptionResNetV2(include_top=False, weights='imagenet', input_shape=(IMG_H, IMG_W, NUM_CHANNELS),
@@ -89,3 +89,4 @@ def load_incep_res():
     print 'Compile model'
     model.summary()
     return model
+"""
