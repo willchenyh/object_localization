@@ -79,8 +79,6 @@ def load_data(src_path):
     train_set = [fname for fname in file_list if fname.endswith('.jpg')]
 
     # read images into numpy arrays
-    num_images = len(train_set)
-    print '-- This set has {} images.'.format(num_images)
     images = []
     labels = []
     label_dict = load_labels(os.path.join(src_path,LABEL_FILE))
