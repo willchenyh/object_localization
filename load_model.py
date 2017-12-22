@@ -34,7 +34,7 @@ def load_vgg16():
     print 'Build model'
 
     # train only the top layers
-    for layer in model.layers[:19]:
+    for layer in model.layers[:15]:
         layer.trainable = False
 
     # compile the model
