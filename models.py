@@ -34,7 +34,7 @@ def build_vgg16():
     flat = Flatten()(base_out)
     x = Dense(4096, activation='relu')(flat)
     x = Dense(4096, activation='relu')(x)
-    x = Dense(4096, activation='relu')(x)
+    # x = Dense(4096, activation='relu')(x)
     predictions = Dense(NUM_COORDS, activation='linear')(x)
     model = Model(inputs=base_model.input, outputs=predictions)
 
