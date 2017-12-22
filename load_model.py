@@ -25,8 +25,7 @@ def load_vgg16():
     base_out = base_model.output
     flat = Flatten()(base_out)
     x = Dense(4096, activation='relu')(flat)
-    x = Dropout(0.5)(x)
-    x = Dense(4096, activation='relu')(x)
+    x = Dense(512, activation='relu')(x)
     # hidden = Dense(256, activation='relu')(hidden)
     # hidden = Dense(32, activation='relu')(hidden)
     predictions = Dense(NUM_COORDS, activation='sigmoid')(x)
