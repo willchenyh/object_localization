@@ -88,8 +88,9 @@ def partition_data(image_list):
     # save_index(image_list)
 
     test_set = image_list[:int(n_samples*TEST_SPLIT)]
-    train_set = image_list[int(n_samples*TEST_SPLIT):]
-    return train_set, test_set
+    val_set = image_list[int(n_samples*TEST_SPLIT):int(n_samples*TEST_SPLIT*2)]
+    train_set = image_list[int(n_samples*TEST_SPLIT*2):]
+    return train_set, val_set, test_set
 
 
 def draw_circle(image, cx, cy, image_path, code):
@@ -118,14 +119,13 @@ def augment(image_path, cx, cy):
     img = preprocess_input(img)
 
 
-    # y_augmented = np.array([[cx, cy], [1-cx, cy], [cx, 1-cy], [1-cx, 1-cy]])
+    y_augmented = np.array([[cx, cy], [1-cx, cy], [cx, 1-cy], [1-cx, 1-cy]])
 
-    # img_lr = image.flip_axis(img, 2)
-    # img_ud = image.flip_axis(img, 1)
-    # img_lrud = image.flip_axis(img_lr, 1)
-    # x_augmented = np.concatenate((img,img_lr,img_ud,img_lrud), axis=0)
-    x_augmented = img
-    y_augmented = np.array([[cx, cy]])
+    img_lr = image.flip_axis(img, 2)
+    img_ud = image.flip_axis(img, 1)
+    img_lrud = image.flip_axis(img_lr, 1)
+    x_augmented = np.concatenate((img,img_lr,img_ud,img_lrud), axis=0)
+
 
     # flip_codes = [1, 0, -1]  # hor, ver, both
     # for i,fc in enumerate(flip_codes):
@@ -139,6 +139,21 @@ def augment(image_path, cx, cy):
     # TODO: to test and save images with a drawn label
     draw_circle(orig, cx, cy, image_path, '')
     # draw_circle(img_lr, cx, cy, image_path, '')
+
+    return x_augmented, y_augmented
+
+
+def no_augment(image_path, cx, cy):
+
+    # load RGB image
+    orig = cv2.imread(image_path, 1).astype('float64')
+    orig = cv2.resize(orig, (IMG_H, IMG_W))
+    orig = orig[:,:,[2,1,0]]
+    img = np.expand_dims(orig, axis=0)
+    img = preprocess_input(img)
+
+    x_augmented = img
+    y_augmented = np.array([[cx, cy]])
 
     return x_augmented, y_augmented
 
@@ -172,14 +187,18 @@ def load_data(src_path):
     # get list of image names and partition into train and test sets
     file_list = os.listdir(src_path)
     image_name_list = [fname for fname in file_list if fname.endswith('.jpg')]
-    train_set, test_set = partition_data(image_name_list)
+    train_set, val_set, test_set = partition_data(image_name_list)
 
     # read images into numpy arrays
     x_train, y_train = read_images(train_set, src_path)
     print 'train:', x_train.shape, y_train.shape
+
+    x_val, y_val = read_images(val_set, src_path)
+    print 'val:', x_val.shape, y_val.shape
+
     x_test, y_test = read_images(test_set, src_path)
     print 'test:', x_test.shape, y_test.shape
-    return x_train, y_train, x_test, y_test
+    return x_train, y_train, x_val, y_val, x_test, y_test
 
 
 def compute_accuracy(predictions, gtruth):
@@ -205,11 +224,11 @@ def main():
     print MODEL_NAME, 'created\n'
     # Get data
     print 'Load data:'
-    x_train, y_train, x_test, y_test = load_data(TRAIN_DIR)
+    x_train, y_train, x_val, y_val, x_test, y_test = load_data(TRAIN_DIR)
     # print 'Load val data:'
     # X_val, Y_val = load_data(VAL_DIR)
     # Train model
-    model.fit(x=x_train, y=y_train, batch_size=BATCH_SIZE, epochs=NUM_EPOCHS, validation_split=0.1)
+    model.fit(x=x_train, y=y_train, batch_size=BATCH_SIZE, epochs=NUM_EPOCHS, validation_data=(x_val,y_val))
     print '\n'
     # Save model weights
     model.save('../vgg16_{}_weights.h5'.format(TASK_NAME))
