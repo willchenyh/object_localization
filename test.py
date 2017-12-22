@@ -61,7 +61,7 @@ def augment(img_path, cx, cy):
     img = preprocess_input(img)
 
     # flip image and convert label
-    x_augmented = np.concatenate((img), axis=0)
+    x_augmented = img
     y_augmented = np.array([[cx, cy]])
     return x_augmented, y_augmented
 
