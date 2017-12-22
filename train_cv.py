@@ -248,6 +248,12 @@ def main():
     mse_train = MSE(y_train, train_preds)
     print 'Train MSE:', mse_train
 
+    val_preds = model.predict(x=x_val)
+    ac, error = compute_accuracy(val_preds, y_val)
+    print 'Val accuracy:', ac
+    mse_val = MSE(y_val, val_preds)
+    print 'Train MSE:', mse_val
+
     test_preds = model.predict(x=x_test)
     ac, error = compute_accuracy(test_preds, y_test)
     print 'Test accuracy:', ac
