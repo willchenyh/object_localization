@@ -48,7 +48,7 @@ def main(argv):
     model = load_model(WEIGHTS_PATH)
     # predict and print coordinates
     coords = model.predict(x=img)
-    print coords
+    print coords[0,0], coords[0,1]
 
 
 if __name__ == '__main__':
