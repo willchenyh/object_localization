@@ -43,7 +43,7 @@ def build_vgg16():
         layer.trainable = False
 
     # compile the model
-    model.compile(optimizer=optimizers.SGD(lr=1e-4, momentum=0.9), loss='mean_absolute_error', metrics=['mae'])
+    model.compile(optimizer=optimizers.SGD(lr=1e-4, momentum=0.9), loss='mean_squared_error', metrics=['mse'])
     return model
 
 
