@@ -184,7 +184,7 @@ def load_data(src_path):
 
 def compute_accuracy(predictions, gtruth):
     diff = predictions - gtruth
-    dist = np.linalg.norm(diff, axis=1)
+    dist = np.sqrt(np.linalg.norm(diff, axis=1))
     num_correct = (dist <= RADIUS).sum()
     accuracy = float(num_correct) / predictions.shape[0]
     return accuracy, dist
