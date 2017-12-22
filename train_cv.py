@@ -3,7 +3,7 @@ Author: Yuhan (Will) Chen
 """
 
 
-from load_model import load_model
+from models import build_model
 from keras.preprocessing import image
 
 import numpy as np
@@ -201,7 +201,7 @@ def visualize_test(x_test, y_preds):
 
 def main():
     # make model
-    model = load_model(MODEL_NAME)
+    model = build_model(MODEL_NAME)
     print MODEL_NAME, 'created\n'
     # Get data
     print 'Load data:'
