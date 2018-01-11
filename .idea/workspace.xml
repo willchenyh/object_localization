@@ -17,8 +17,8 @@
       <file leaf-file-name="region_cropping.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/region_cropping.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="408">
-              <caret line="24" column="71" lean-forward="true" selection-start-line="24" selection-start-column="71" selection-end-line="24" selection-end-column="71" />
+            <state relative-caret-position="374">
+              <caret line="58" column="18" lean-forward="true" selection-start-line="58" selection-start-column="18" selection-end-line="58" selection-end-column="18" />
               <folding>
                 <element signature="e#76#86#0" expanded="true" />
               </folding>
@@ -29,8 +29,8 @@
       <file leaf-file-name="train_phone_finder.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/train_phone_finder.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="306">
-              <caret line="57" column="31" lean-forward="false" selection-start-line="54" selection-start-column="4" selection-end-line="57" selection-end-column="31" />
+            <state relative-caret-position="0">
+              <caret line="18" column="25" lean-forward="true" selection-start-line="18" selection-start-column="25" selection-end-line="18" selection-end-column="25" />
               <folding>
                 <element signature="e#116#126#0" expanded="true" />
               </folding>
@@ -316,8 +316,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/train_phone_finder.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="57" column="31" lean-forward="false" selection-start-line="54" selection-start-column="4" selection-end-line="57" selection-end-column="31" />
+        <state relative-caret-position="0">
+          <caret line="18" column="25" lean-forward="true" selection-start-line="18" selection-start-column="25" selection-end-line="18" selection-end-column="25" />
           <folding>
             <element signature="e#116#126#0" expanded="true" />
           </folding>
@@ -326,8 +326,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/region_cropping.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="408">
-          <caret line="24" column="71" lean-forward="true" selection-start-line="24" selection-start-column="71" selection-end-line="24" selection-end-column="71" />
+        <state relative-caret-position="374">
+          <caret line="58" column="18" lean-forward="true" selection-start-line="58" selection-start-column="18" selection-end-line="58" selection-end-column="18" />
           <folding>
             <element signature="e#76#86#0" expanded="true" />
           </folding>
