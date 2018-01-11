@@ -29,19 +29,22 @@ def load_labels(file_path):
     return label_dict
 
 
-def crop_regions(orig):
+def crop_regions(src_path, img_name):
 
-    # load label dict
-    label_dict = load_labels(os.path.join(SRC_PATH, LABEL_FILE))
+    orig = cv2.imread(os.path.join(src_path, img_name), 1).astype('float64')
 
     # compute region height and width
     orig_height, orig_width = orig.shape[0], orig.shape[1]
     reg_height, reg_width = orig_height / 4, orig_width / 5
 
+    # load label dict
+    label_dict = load_labels(os.path.join(src_path, LABEL_FILE))
+    x_normalized, y_normalized = label_dict[img_name]
+    x_pixel, y_pixel = x_normalized * orig_width, y_normalized * orig_height
+
     # crop regions, with half overlap. => 7 along height, 9 along width
     regions = []
-    x_normalized, y_normalized = label_dict[IMG_NAME]
-    x_pixel, y_pixel = x_normalized * orig_width, y_normalized * orig_height
+
     for row in range(7):
         for col in range(9):
             row_start = row * reg_height / 2
@@ -53,24 +56,31 @@ def crop_regions(orig):
             else:
                 binary = 'neg'
             region = orig[row_start:row_end, col_start:col_end, :]
-            region_name = 'test_r{}_c{}_{}.jpg'.format(row, col, binary)
+            region_name = '{}_r{}_c{}_{}.jpg'.format(img_name, row, col, binary)
             cv2.imwrite(os.path.join(REGIONS_PATH, region_name), region)
 
     return regions
 
 
+def load_data(src_path):
+    # get list of image names
+    file_list = os.listdir(src_path)
+    train_set = [fname for fname in file_list if fname.endswith('.jpg')]
+
+    for image_name in train_set:
+        # orig = orig[:, :, [2, 1, 0]]  # convert to RGB
+
+        # crop regions
+        regions = crop_regions(src_path, image_name)
+
+
+        # # concat
+        # img = np.expand_dims(orig, axis=0)
+        # img = preprocess_input(img)
+
+
 def main():
-    # read image
-    orig = cv2.imread(os.path.join(SRC_PATH, IMG_NAME), 1).astype('float64')
-    # orig = orig[:, :, [2, 1, 0]]  # convert to RGB
-
-    # crop regions
-    regions = crop_regions(orig)
-
-
-    # # concat
-    # img = np.expand_dims(orig, axis=0)
-    # img = preprocess_input(img)
+    load_data(SRC_PATH)
 
 
 if __name__ == '__main__':
