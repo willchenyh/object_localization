@@ -10,6 +10,7 @@ REGIONS_PATH = 'regions'
 SRC_PATH = 'find_phone'
 LABEL_FILE = 'labels.txt'
 IMG_NAME = '0.jpg'
+STEP_PCT = 0.25  # of small region
 
 
 def load_labels(file_path):
@@ -44,20 +45,23 @@ def crop_regions(src_path, img_name):
 
     # crop regions, with half overlap. => 7 along height, 9 along width
     regions = []
+    row_step_size = int(reg_height * 0.25)
+    col_step_size = int(reg_width * 0.25)
+    row_start_idx = range(0, orig_height-reg_height, row_step_size)
+    col_start_idx = range(0, orig_width-reg_width, col_step_size)
 
-    for row in range(7):
-        for col in range(9):
-            row_start = row * reg_height / 2
+    for row_start in row_start_idx:
+        for col_start in col_start_idx:
             row_end = row_start + reg_height
-            col_start = col * reg_width / 2
             col_end = col_start + reg_width
             if row_start < y_pixel < row_end and col_start < x_pixel < col_end:
                 binary = 'pos'
             else:
                 binary = 'neg'
+            folder = os.path.join(REGIONS_PATH, binary)
             region = orig[row_start:row_end, col_start:col_end, :]
-            region_name = '{}_r{}_c{}_{}.jpg'.format(img_name, row, col, binary)
-            cv2.imwrite(os.path.join(REGIONS_PATH, region_name), region)
+            region_name = '{}_r{}_c{}_{}.jpg'.format(img_name, row_start, col_start, binary)
+            cv2.imwrite(os.path.join(folder, region_name), region)
 
     return regions
 
