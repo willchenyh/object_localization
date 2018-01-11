@@ -18,7 +18,9 @@ def crop_regions(orig):
     regions = []
     for row in range(7):
         for col in range(9):
-            region = orig[row*reg_height:(row+1)*reg_height, col*reg_width:(col+1)*reg_width, :]
+            row_start = row * reg_height / 2
+            col_start = col * reg_width / 2
+            region = orig[row_start:row_start+reg_height, col_start:col_start+reg_width, :]
             region_name = 'test_r{}_c{}.jpg'.format(row, col)
             cv2.imwrite(os.path.join(REGIONS_PATH,region_name), region)
 
