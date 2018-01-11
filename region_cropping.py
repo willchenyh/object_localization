@@ -26,7 +26,7 @@ def crop_regions(orig):
 
 def main():
     # read image
-    orig = cv2.imread('/find_phone/0.jpg', 1).astype('float64')
+    orig = cv2.imread('find_phone/0.jpg', 1).astype('float64')
     # orig = orig[:, :, [2, 1, 0]]  # convert to RGB
 
     # crop regions
