@@ -11,7 +11,7 @@ SRC_PATH = 'find_phone'
 LABEL_FILE = 'labels.txt'
 IMG_NAME = '0.jpg'
 STEP_PCT = 0.20  # of small region
-REGION_PCT = float(1/6)  # of sides of original image
+REGION_PCT = 1.0 / 6.0  # of sides of original image
 
 
 def load_labels(file_path):
@@ -39,8 +39,8 @@ def crop_regions(src_path, img_name):
     orig_height, orig_width = orig.shape[0], orig.shape[1]
     reg_height, reg_width = int(orig_height * REGION_PCT), int(orig_width * REGION_PCT)
     print img_name
-    print orig_height, orig_width
-    print reg_height, reg_width
+    # print orig_height, orig_width
+    # print reg_height, reg_width
 
     # load label dict
     label_dict = load_labels(os.path.join(src_path, LABEL_FILE))
