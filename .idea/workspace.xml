@@ -17,8 +17,8 @@
       <file leaf-file-name="region_cropping.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/region_cropping.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="289">
-              <caret line="53" column="39" lean-forward="true" selection-start-line="53" selection-start-column="39" selection-end-line="53" selection-end-column="39" />
+            <state relative-caret-position="170">
+              <caret line="10" column="25" lean-forward="true" selection-start-line="10" selection-start-column="25" selection-end-line="10" selection-end-column="25" />
               <folding>
                 <element signature="e#76#86#0" expanded="true" />
               </folding>
@@ -26,11 +26,21 @@
           </provider>
         </entry>
       </file>
+      <file leaf-file-name="train_regions.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/train_regions.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="0">
+              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="train_phone_finder.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/train_phone_finder.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="323">
-              <caret line="85" column="55" lean-forward="false" selection-start-line="84" selection-start-column="4" selection-end-line="85" selection-end-column="55" />
+            <state relative-caret-position="238">
+              <caret line="80" column="35" lean-forward="false" selection-start-line="80" selection-start-column="35" selection-end-line="80" selection-end-column="35" />
               <folding>
                 <element signature="e#116#126#0" expanded="true" />
               </folding>
@@ -53,7 +63,12 @@
       <find>pool</find>
       <find>IMG_H</find>
       <find>NUM_CH</find>
+      <find>0.25</find>
+      <find>STEP_PC</find>
     </findStrings>
+    <replaceStrings>
+      <replace>STEP_PCT</replace>
+    </replaceStrings>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -71,6 +86,7 @@
         <option value="$PROJECT_DIR$/test.py" />
         <option value="$PROJECT_DIR$/models.py" />
         <option value="$PROJECT_DIR$/train_cv.py" />
+        <option value="$PROJECT_DIR$/train_regions.py" />
         <option value="$PROJECT_DIR$/region_cropping.py" />
       </list>
     </option>
@@ -316,18 +332,26 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/train_phone_finder.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="323">
-          <caret line="85" column="55" lean-forward="false" selection-start-line="84" selection-start-column="4" selection-end-line="85" selection-end-column="55" />
+        <state relative-caret-position="238">
+          <caret line="80" column="35" lean-forward="false" selection-start-line="80" selection-start-column="35" selection-end-line="80" selection-end-column="35" />
           <folding>
             <element signature="e#116#126#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/train_regions.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/region_cropping.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="289">
-          <caret line="53" column="39" lean-forward="true" selection-start-line="53" selection-start-column="39" selection-end-line="53" selection-end-column="39" />
+        <state relative-caret-position="170">
+          <caret line="10" column="25" lean-forward="true" selection-start-line="10" selection-start-column="25" selection-end-line="10" selection-end-column="25" />
           <folding>
             <element signature="e#76#86#0" expanded="true" />
           </folding>

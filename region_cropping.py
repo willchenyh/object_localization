@@ -10,7 +10,8 @@ REGIONS_PATH = 'regions'
 SRC_PATH = 'find_phone'
 LABEL_FILE = 'labels.txt'
 IMG_NAME = '0.jpg'
-STEP_PCT = 0.25  # of small region
+STEP_PCT = 0.20  # of small region
+REGION_PCT = float(1/6)  # of sides of original image
 
 
 def load_labels(file_path):
@@ -36,7 +37,7 @@ def crop_regions(src_path, img_name):
 
     # compute region height and width
     orig_height, orig_width = orig.shape[0], orig.shape[1]
-    reg_height, reg_width = orig_height / 4, orig_width / 5
+    reg_height, reg_width = int(orig_height * REGION_PCT), int(orig_width * REGION_PCT)
 
     # load label dict
     label_dict = load_labels(os.path.join(src_path, LABEL_FILE))
@@ -45,8 +46,8 @@ def crop_regions(src_path, img_name):
 
     # crop regions, with half overlap. => 7 along height, 9 along width
     regions = []
-    row_step_size = int(reg_height * 0.25)
-    col_step_size = int(reg_width * 0.25)
+    row_step_size = int(reg_height * STEP_PCT)
+    col_step_size = int(reg_width * STEP_PCT)
     row_start_idx = range(0, orig_height-reg_height, row_step_size)
     col_start_idx = range(0, orig_width-reg_width, col_step_size)
 
