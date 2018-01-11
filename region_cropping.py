@@ -4,6 +4,7 @@ region size: 1/4 height, 1/5 width
 """
 
 import cv2
+import os
 
 REGIONS_PATH = 'regions'
 
@@ -18,8 +19,8 @@ def crop_regions(orig):
     for row in range(7):
         for col in range(9):
             region = orig[row*reg_height:(row+1)*reg_height, col*reg_width:(col+1)*reg_width, :]
-            region_name = 'test_r{}_c{}.jpg'
-            cv2.imwrite(REGIONS_PATH+region_name, region)
+            region_name = 'test_r{}_c{}.jpg'.format(row, col)
+            cv2.imwrite(os.path.join(REGIONS_PATH,region_name), region)
 
     return regions
 
