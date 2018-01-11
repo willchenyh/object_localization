@@ -17,8 +17,8 @@
       <file leaf-file-name="region_cropping.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/region_cropping.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="170">
-              <caret line="10" column="25" lean-forward="true" selection-start-line="10" selection-start-column="25" selection-end-line="10" selection-end-column="25" />
+            <state relative-caret-position="340">
+              <caret line="41" column="31" lean-forward="false" selection-start-line="41" selection-start-column="31" selection-end-line="41" selection-end-column="31" />
               <folding>
                 <element signature="e#76#86#0" expanded="true" />
               </folding>
@@ -350,8 +350,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/region_cropping.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="10" column="25" lean-forward="true" selection-start-line="10" selection-start-column="25" selection-end-line="10" selection-end-column="25" />
+        <state relative-caret-position="340">
+          <caret line="41" column="31" lean-forward="false" selection-start-line="41" selection-start-column="31" selection-end-line="41" selection-end-column="31" />
           <folding>
             <element signature="e#76#86#0" expanded="true" />
           </folding>

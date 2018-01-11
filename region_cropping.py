@@ -38,6 +38,8 @@ def crop_regions(src_path, img_name):
     # compute region height and width
     orig_height, orig_width = orig.shape[0], orig.shape[1]
     reg_height, reg_width = int(orig_height * REGION_PCT), int(orig_width * REGION_PCT)
+    print img_name
+    print reg_height, reg_width
 
     # load label dict
     label_dict = load_labels(os.path.join(src_path, LABEL_FILE))
