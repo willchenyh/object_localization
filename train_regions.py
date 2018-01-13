@@ -15,13 +15,14 @@ from keras.utils.np_utils import to_categorical
 
 IMG_H, IMG_W = 224, 224
 NUM_EPOCHS = 5
-BATCH_SIZE = 16
+BATCH_SIZE = 18
 NUM_COORDS = 2
 LABEL_FILE = 'labels.txt'
 MODEL_NAME = 'vgg16'
 WEIGHTS_PATH = 'find_phone_{}_weights.h5'.format(MODEL_NAME)
 STEP_PCT = 0.20  # of small region
 REGION_PCT = 1.0 / 6.0  # of sides of original image
+NUM_RG_PER_IMG = 180
 
 
 def load_labels(file_path):
@@ -172,24 +173,28 @@ def load_data(src_path):
     return x, y
 
 
-def data_partition(x, y, val_ratio=0.1):
-    # split input and return train and val data in tuple (x,y)
-    num_samples = x.shape[0]
-    num_train = int(num_samples * (1 - val_ratio))
-    x_train = x[:num_train, :, :, :]
-    y_train = y[:num_train, :]
-    x_val = x[num_train:, :, :, :]
-    y_val = x[num_train:, :, :, :]
-    return (x_train, y_train), (x_val, y_val)
+def data_partition(src_path, val_ratio=0.1):
+    # get list of image names
+    file_list = os.listdir(src_path)
+    img_name_list = [fname for fname in file_list if fname.endswith('.jpg')]
+
+    # split input list and return train and val img names
+    num_samples = len(img_name_list)
+    num_train = num_samples * val_ratio
+    train_imgs = img_name_list[:num_train]
+    val_imgs = img_name_list[num_train:]
+    return train_imgs, val_imgs
 
 
-def data_gen(data_set):
-    (x, y) = data_set
-    num_samples = x.shape[0]
+def data_gen(src_path, img_name_list):
+
     while True:
-        steps = range(0, num_samples, BATCH_SIZE)
-        for idx in steps:
-            yield (x[idx:idx+BATCH_SIZE, :, :, :], y[idx:idx+BATCH_SIZE, :])
+        for img_name in img_name_list:
+            regions, rg_labels = crop_regions(src_path, img_name)
+            num_samples = regions.shape[0]
+            steps = range(0, num_samples, BATCH_SIZE)
+            for idx in steps:
+                yield (regions[idx:idx+BATCH_SIZE, :, :, :], rg_labels[idx:idx+BATCH_SIZE, :])
 
 
 def main(argv):
@@ -206,16 +211,18 @@ def main(argv):
     # make model
     model = build_model(MODEL_NAME)
     # Get data
-    x_train, y_train = load_data(train_dir)
-    train_set, val_set = data_partition(x_train, y_train, 0.1)
+    train_list, val_list = data_partition(train_dir, 0.1)
+    train_gen = data_gen(train_dir, train_list)
+    val_gen = data_gen(train_dir, val_list)
+
     # Train model
     # model.fit(x=x_train, y=y_train, batch_size=BATCH_SIZE, epochs=NUM_EPOCHS, validation_split=0.1)
-    num_samples = train_set[0].shape[0]
-    val_spl_num = val_set[0].shape[0]
-    model.fit_generator(generator=data_gen(train_set),
+    num_samples = len(train_list) * NUM_RG_PER_IMG
+    val_spl_num = len(val_list) * NUM_RG_PER_IMG
+    model.fit_generator(generator=train_gen,
                         steps_per_epoch=num_samples // BATCH_SIZE,
                         epochs=NUM_EPOCHS,
-                        validation_data=data_gen(train_set),
+                        validation_data=val_gen,
                         validation_steps=val_spl_num // BATCH_SIZE,
                         )
     # Save model weights
