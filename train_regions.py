@@ -173,17 +173,33 @@ def load_data(src_path):
     return x, y
 
 
-def data_partition(src_path, val_ratio=0.1):
+def data_partition(src_path, val_ratio=0.1, test_ratio=0.2):
     # get list of image names
     file_list = os.listdir(src_path)
     img_name_list = [fname for fname in file_list if fname.endswith('.jpg')]
 
     # split input list and return train and val img names
     num_samples = len(img_name_list)
-    num_train = int(num_samples * (1 - val_ratio))
+    # num_train = int(num_samples * (1 - val_ratio))
+    # train_imgs = img_name_list[:num_train]
+    # val_imgs = img_name_list[num_train:]
+
+    num_train = int(num_samples * (1 - val_ratio - test_ratio))
+    num_val = int(num_samples * val_ratio)
     train_imgs = img_name_list[:num_train]
-    val_imgs = img_name_list[num_train:]
-    return train_imgs, val_imgs
+    val_imgs = img_name_list[num_train:num_train+num_val]
+    test_imgs = img_name_list[num_train+num_val:]
+
+    # write sets to a file for testing
+    f = open('sets_partition.txt', 'wb')
+    for img in train_imgs:
+        f.write(img+' 0\n')
+    for img in val_imgs:
+        f.write(img+' 1\n')
+    for img in test_imgs:
+        f.write(img+' 2\n')
+
+    return train_imgs, val_imgs, test_imgs
 
 
 def data_gen(src_path, img_name_list):
@@ -212,7 +228,7 @@ def main(argv):
     # make model
     model = build_model(MODEL_NAME)
     # Get data
-    train_list, val_list = data_partition(train_dir, 0.1)
+    train_list, val_list, test_list = data_partition(train_dir)
     train_gen = data_gen(train_dir, train_list)
     val_gen = data_gen(train_dir, val_list)
 
