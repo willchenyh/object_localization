@@ -210,10 +210,12 @@ def main(argv):
     # Train model
     # model.fit(x=x_train, y=y_train, batch_size=BATCH_SIZE, epochs=NUM_EPOCHS, validation_split=0.1)
     num_samples = train_set[0].shape[0]
+    val_spl_num = val_set[0].shape[0]
     model.fit_generator(generator=data_gen(train_set),
-                        steps_per_epoch= num_samples // BATCH_SIZE,
+                        steps_per_epoch=num_samples // BATCH_SIZE,
                         epochs=NUM_EPOCHS,
-                        validation_data=val_set
+                        validation_data=data_gen(train_set),
+                        validation_steps=val_spl_num // BATCH_SIZE,
                         )
     # Save model weights
     model.save(WEIGHTS_PATH)

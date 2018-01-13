@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="47f9c7af-eaaa-4286-9870-7da185d04bf5" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/train_regions.py" afterPath="$PROJECT_DIR$/train_regions.py" />
     </list>
     <ignored path="$PROJECT_DIR$/.idea/" />
@@ -18,8 +17,8 @@
       <file leaf-file-name="train_regions.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/train_regions.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="314">
-              <caret line="215" column="47" lean-forward="true" selection-start-line="215" selection-start-column="47" selection-end-line="215" selection-end-column="47" />
+            <state relative-caret-position="399">
+              <caret line="217" column="67" lean-forward="false" selection-start-line="217" selection-start-column="67" selection-end-line="217" selection-end-column="67" />
               <folding>
                 <element signature="e#116#126#0" expanded="true" />
               </folding>
@@ -369,8 +368,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/train_regions.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="314">
-          <caret line="215" column="47" lean-forward="true" selection-start-line="215" selection-start-column="47" selection-end-line="215" selection-end-column="47" />
+        <state relative-caret-position="399">
+          <caret line="217" column="67" lean-forward="false" selection-start-line="217" selection-start-column="67" selection-end-line="217" selection-end-column="67" />
           <folding>
             <element signature="e#116#126#0" expanded="true" />
           </folding>
