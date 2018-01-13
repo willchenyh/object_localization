@@ -172,6 +172,10 @@ def load_data(src_path):
     return x, y
 
 
+def get_data_paths(src_dir):
+    pass
+
+
 def main(argv):
     """
     Creates a Convolutional Neural Network, train on the data in input source directory, and save weights.

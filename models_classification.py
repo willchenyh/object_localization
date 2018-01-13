@@ -33,7 +33,7 @@ def build_vgg16():
     base_out = base_model.output
     flat = Flatten()(base_out)
     x = Dense(4096, activation='relu')(flat)
-    # x = Dropout(0.5)(x)
+    x = Dropout(0.5)(x)
     x = Dense(4096, activation='relu')(x)
     predictions = Dense(NUM_CLASSES, activation='softmax')(x)
     model = Model(inputs=base_model.input, outputs=predictions)
