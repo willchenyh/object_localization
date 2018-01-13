@@ -93,27 +93,36 @@ def crop_regions(src_path, img_name, model):
             region = cv2.resize(region, (IMG_H, IMG_W))
             region = np.expand_dims(region, axis=0)
 
-            scores = model.predict(x=region)
-            sorted_idx = np.argsort(scores)
-            label = sorted_idx[0, -1]
+            regions[i*len(col_start_idx)+j, :, :, :] = region
 
-            if label == 1:
-                binary = 'pos'
 
-                # add coords to array
-                coords = np.array([[row_start, col_start]])
-                pos_regions = np.concatenate((pos_regions, coords), axis=0)
-                # print pos_regions.shape
-            else:
-                binary = 'neg'
+    scores = model.predict(x=regions)
+    sorted_idx = np.argsort(scores)  # sort index by row
+    labels = sorted_idx[:, -1]  # 1d array
+    pos_idx = np.argwhere(labels==1)  # 2d array nx1
+    row_nums = np.divide(pos_idx, len(col_start_idx))
+    row_idx = row_nums * row_step_size
+    col_nums = np.remainder(pos_idx, len(col_start_idx))
+    col_idx = col_nums * col_step_size
+    rnc = np.concatenate((row_idx, col_idx), axis=1)
+    print 'rnc shape', rnc.shape
+    pos_mean = np.mean(rnc, axis=0)
 
-            # folder = os.path.join(REGIONS_PATH, binary)
-            # regions[i*len(col_start_idx)+j, :, :, :] = region
 
-            # region_name = '{}_r{}_c{}_{}.jpg'.format(img_name, row_start, col_start, binary)
-            # cv2.imwrite(os.path.join(folder, region_name), region)
-    pos_regions = pos_regions[1:, :]
-    pos_mean = np.mean(pos_regions, axis=0)
+
+
+
+
+
+    # folder = os.path.join(REGIONS_PATH, binary)
+    # regions[i*len(col_start_idx)+j, :, :, :] = region
+
+    # region_name = '{}_r{}_c{}_{}.jpg'.format(img_name, row_start, col_start, binary)
+    # cv2.imwrite(os.path.join(folder, region_name), region)
+
+    # pos_regions = pos_regions[1:, :]
+    # pos_mean = np.mean(pos_regions, axis=0)
+
     # center_row = pos_mean[0,0] + 0.5 * reg_height
     # center_col = pos_mean[0,1] + 0.5 * reg_width
     center_coord = pos_mean + 0.5 * np.array([[reg_height, reg_width]])
@@ -126,7 +135,7 @@ def crop_regions(src_path, img_name, model):
     
     correct = 0
     if dist <= 0.05:
-        print 'yayyyyyy!!!!!!!!!!!!!!!!!'
+        # print 'yayyyyyy!!!!!!!!!!!!!!!!!'
         correct = 1
     print 'dist', dist, '     ', correct
     print
