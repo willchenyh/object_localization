@@ -175,8 +175,11 @@ def load_data(src_path):
 
 def data_partition(src_path, val_ratio=0.1, test_ratio=0.2):
     # get list of image names
-    file_list = os.listdir(src_path)
-    img_name_list = [fname for fname in file_list if fname.endswith('.jpg')]
+    # file_list = os.listdir(src_path)
+    # img_name_list = [fname for fname in file_list if fname.endswith('.jpg')]
+    f = open('random_list.txt', 'rb')
+    img_name_list = f.readlines()
+    img_name_list = [img_name.strip() for img_name in img_name_list]
 
     # split input list and return train and val img names
     num_samples = len(img_name_list)
@@ -184,20 +187,38 @@ def data_partition(src_path, val_ratio=0.1, test_ratio=0.2):
     # train_imgs = img_name_list[:num_train]
     # val_imgs = img_name_list[num_train:]
 
-    num_train = int(num_samples * (1 - val_ratio - test_ratio))
-    num_val = int(num_samples * val_ratio)
-    train_imgs = img_name_list[:num_train]
-    val_imgs = img_name_list[num_train:num_train+num_val]
-    test_imgs = img_name_list[num_train+num_val:]
+
+    idx = 0
+
+    num_test = int(num_samples * test_ratio)
+    # for idx in range(5):
+    if idx == 4:
+        test_imgs = img_name_list[idx * num_test:]
+        train_val_imgs = img_name_list[:idx*num_test]
+    else:
+        test_imgs = img_name_list[idx*num_test:(idx+1)*num_test]
+        train_val_imgs = img_name_list[:idx*num_test] + img_name_list[(idx+1)*num_test:]
+        # break
+
+    num_train = int(len(train_val_imgs) * (1 - val_ratio))
+
+    train_imgs = train_val_imgs[:num_train]
+    val_imgs = train_val_imgs[num_train:]
+
+    # num_train = int(num_samples * (1 - val_ratio - test_ratio))
+    # num_val = int(num_samples * val_ratio)
+    # train_imgs = img_name_list[:num_train]
+    # val_imgs = img_name_list[num_train:num_train+num_val]
+    # test_imgs = img_name_list[num_train+num_val:]
 
     # write sets to a file for testing
-    f = open('sets_partition.txt', 'wb')
-    for img in train_imgs:
-        f.write(img+' 0\n')
-    for img in val_imgs:
-        f.write(img+' 1\n')
-    for img in test_imgs:
-        f.write(img+' 2\n')
+    # f = open('sets_partition.txt', 'wb')
+    # for img in train_imgs:
+    #     f.write(img+' 0\n')
+    # for img in val_imgs:
+    #     f.write(img+' 1\n')
+    # for img in test_imgs:
+    #     f.write(img+' 2\n')
 
     return train_imgs, val_imgs, test_imgs
 
@@ -222,6 +243,8 @@ def main(argv):
     """
     assert isinstance(argv, list)
     assert len(argv) == 1
+
+
 
     # read command line arguments
     train_dir = argv[0]
