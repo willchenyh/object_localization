@@ -103,7 +103,7 @@ def crop_regions(src_path, img_name, model):
                 # add coords to array
                 coords = np.array([[row_start, col_start]])
                 pos_regions = np.concatenate((pos_regions, coords), axis=0)
-                print pos_regions.shape
+                # print pos_regions.shape
             else:
                 binary = 'neg'
 
@@ -121,13 +121,26 @@ def crop_regions(src_path, img_name, model):
 
     dist = np.linalg.norm(center_normal - np.array([[y_normalized, x_normalized]]))
 
-    print 'center', center_coord
+    print 'center', center_normal
     print 'truth', x_normalized, y_normalized
     print 'dist', dist
+    correct = 0
     if dist <= 0.05:
         print 'yayyyyyy!!!!!!!!!!!!!!!!!'
-    return regions, region_labels
+        correct = 1
+    return correct
 
+
+def test_on_all(src_path, model):
+    file_list = os.listdir(src_path)
+    img_name_list = [fname for fname in file_list if fname.endswith('.jpg')]
+
+    correct = 0
+    for img_name in img_name_list:
+        correct += crop_regions(src_path, img_name, model)
+    accuracy = correct / float(len(img_name_list))
+    print '========================='
+    print 'total accuracy', accuracy
 
 def main(argv):
     """
@@ -136,15 +149,15 @@ def main(argv):
     :return: none
     """
     assert isinstance(argv, list)
-    assert len(argv) == 2
+    assert len(argv) == 1
 
     # read command line arguments
-    path, name = argv[0], argv[1]
+    src_path, name = argv[0], argv[1]
     # load image
     # load model
     model = load_model(WEIGHTS_PATH)
-    crop_regions(path, name, model)
-
+    # crop_regions(path, name, model)
+    test_on_all(src_path, model)
 
     # predict and print coordinates
     # coords = model.predict(x=img)
