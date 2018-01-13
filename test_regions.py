@@ -121,19 +121,21 @@ def crop_regions(src_path, img_name, model):
 
     dist = np.linalg.norm(center_normal - np.array([[y_normalized, x_normalized]]))
 
-    print 'center', center_normal
-    print 'truth', x_normalized, y_normalized
-    print 'dist', dist
+    print img_name
+    print 'center', center_normal, 'truth', (y_normalized, x_normalized)
+    
     correct = 0
     if dist <= 0.05:
         print 'yayyyyyy!!!!!!!!!!!!!!!!!'
         correct = 1
+    print 'dist', dist, '     ', correct
+    print
     return correct
 
 
 def test_on_all(src_path, model):
     file_list = os.listdir(src_path)
-    img_name_list = [fname for fname in file_list if fname.endswith('.jpg')]
+    img_name_list = sorted([fname for fname in file_list if fname.endswith('.jpg')])
 
     correct = 0
     for img_name in img_name_list:
@@ -141,6 +143,7 @@ def test_on_all(src_path, model):
     accuracy = correct / float(len(img_name_list))
     print '========================='
     print 'total accuracy', accuracy
+
 
 def main(argv):
     """
@@ -152,7 +155,7 @@ def main(argv):
     assert len(argv) == 1
 
     # read command line arguments
-    src_path, name = argv[0], argv[1]
+    src_path = argv[0]
     # load image
     # load model
     model = load_model(WEIGHTS_PATH)
