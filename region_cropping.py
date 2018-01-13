@@ -55,7 +55,7 @@ def crop_regions(src_path, img_name):
     row_start_idx = range(0, orig_height-reg_height, row_step_size)
     col_start_idx = range(0, orig_width-reg_width, col_step_size)
 
-    pos_regions = np.array([-1, -1])  # two starting coordinates
+    pos_regions = np.array([[-1, -1]])  # two starting coordinates
     for row_start in row_start_idx:
         for col_start in col_start_idx:
             row_end = row_start + reg_height
@@ -63,8 +63,9 @@ def crop_regions(src_path, img_name):
             if row_start < y_pixel < row_end and col_start < x_pixel < col_end:
                 binary = 'pos'
                 # add coords to array
-                coords = np.array([row_start, col_start])
+                coords = np.array([[row_start, col_start]])
                 pos_regions = np.concatenate((pos_regions, coords), axis=0)
+                # print pos_regions.shape
             else:
                 binary = 'neg'
             # folder = os.path.join(REGIONS_PATH, binary)
@@ -75,11 +76,12 @@ def crop_regions(src_path, img_name):
     pos_mean = np.mean(pos_regions, axis=0)
     # center_row = pos_mean[0,0] + 0.5 * reg_height
     # center_col = pos_mean[0,1] + 0.5 * reg_width
-    center_coord = pos_mean + 0.5 * np.array([reg_height, reg_width])
-    print center_coord
-    center_normal = np.divide(center_coord, np.array([orig_height, orig_width]))
-    dist = np.linalg.norm(center_normal - np.array([y_normalized, x_normalized]))
-    print dist
+    center_coord = pos_mean + 0.5 * np.array([[reg_height, reg_width]])
+    # print center_coord
+    center_normal = np.divide(center_coord, np.array([[orig_height, orig_width]]))
+    dist = np.linalg.norm(center_normal - np.array([[y_normalized, x_normalized]]))
+    if dist > 0.04:
+    	print dist
     return dist
 
 
