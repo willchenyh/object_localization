@@ -5,6 +5,7 @@ region size: 1/4 height, 1/5 width
 
 import cv2
 import os
+import numpy as np
 
 REGIONS_PATH = 'regions'
 SRC_PATH = 'find_phone'
@@ -54,20 +55,32 @@ def crop_regions(src_path, img_name):
     row_start_idx = range(0, orig_height-reg_height, row_step_size)
     col_start_idx = range(0, orig_width-reg_width, col_step_size)
 
+    pos_regions = np.array([-1, -1])  # two starting coordinates
     for row_start in row_start_idx:
         for col_start in col_start_idx:
             row_end = row_start + reg_height
             col_end = col_start + reg_width
             if row_start < y_pixel < row_end and col_start < x_pixel < col_end:
                 binary = 'pos'
+                # add coords to array
+                coords = np.array([row_start, col_start])
+                pos_regions = np.concatenate((pos_regions, coords), axis=0)
             else:
                 binary = 'neg'
-            folder = os.path.join(REGIONS_PATH, binary)
-            region = orig[row_start:row_end, col_start:col_end, :]
-            region_name = '{}_r{}_c{}_{}.jpg'.format(img_name, row_start, col_start, binary)
-            cv2.imwrite(os.path.join(folder, region_name), region)
-
-    return regions
+            # folder = os.path.join(REGIONS_PATH, binary)
+            # region = orig[row_start:row_end, col_start:col_end, :]
+            # region_name = '{}_r{}_c{}_{}.jpg'.format(img_name, row_start, col_start, binary)
+            # cv2.imwrite(os.path.join(folder, region_name), region)
+    pos_regions = pos_regions[1:, :]
+    pos_mean = np.mean(pos_regions, axis=0)
+    # center_row = pos_mean[0,0] + 0.5 * reg_height
+    # center_col = pos_mean[0,1] + 0.5 * reg_width
+    center_coord = pos_mean + 0.5 * np.array([reg_height, reg_width])
+    print center_coord
+    center_normal = np.divide(center_coord, np.array([orig_height, orig_width]))
+    dist = np.linalg.norm(center_normal - np.array([y_normalized, x_normalized]))
+    print dist
+    return dist
 
 
 def load_data(src_path):
