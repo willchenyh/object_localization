@@ -72,6 +72,8 @@ def augment(img_path, cx, cy):
 def crop_regions(src_path, img_name):
 
     orig = cv2.imread(os.path.join(src_path, img_name), 1).astype('float64')
+    orig = orig[:, :, [2, 1, 0]]
+    orig = preprocess_input(orig)
 
     # compute region height and width
     orig_height, orig_width = orig.shape[0], orig.shape[1]
@@ -95,7 +97,7 @@ def crop_regions(src_path, img_name):
     pos_regions = np.array([[-1, -1]])  # two starting coordinates
 
     num_regions = len(row_start_idx) * len(col_start_idx)
-    regions = np.zeros((num_regions, reg_height, reg_width, 3))
+    regions = np.zeros((num_regions, IMG_H, IMG_W, 3))
     region_labels = np.zeros((num_regions, 1))
     for i, row_start in enumerate(row_start_idx):
         for j, col_start in enumerate(col_start_idx):
@@ -113,6 +115,7 @@ def crop_regions(src_path, img_name):
                 region_labels[i * len(col_start_idx) + j, :] = 0
             # folder = os.path.join(REGIONS_PATH, binary)
             region = orig[row_start:row_end, col_start:col_end, :]
+            region = cv2.resize(region, (IMG_H, IMG_W))
             regions[i*len(col_start_idx)+j, :, :, :] = region
 
             # region_name = '{}_r{}_c{}_{}.jpg'.format(img_name, row_start, col_start, binary)
