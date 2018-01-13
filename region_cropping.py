@@ -81,7 +81,7 @@ def crop_regions(src_path, img_name):
     center_normal = np.divide(center_coord, np.array([[orig_height, orig_width]]))
     dist = np.linalg.norm(center_normal - np.array([[y_normalized, x_normalized]]))
     if dist > 0.04:
-    	print dist
+        print dist
     return dist
 
 
