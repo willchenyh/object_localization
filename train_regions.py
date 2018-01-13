@@ -95,7 +95,7 @@ def crop_regions(src_path, img_name):
     pos_regions = np.array([[-1, -1]])  # two starting coordinates
 
     num_regions = len(row_start_idx) * len(col_start_idx)
-    regions = np.zeros((num_regions, reg_height, reg_width))
+    regions = np.zeros((num_regions, reg_height, reg_width, 3))
     region_labels = np.zeros((num_regions, 1))
     for i, row_start in enumerate(row_start_idx):
         for j, col_start in enumerate(col_start_idx):
@@ -110,10 +110,10 @@ def crop_regions(src_path, img_name):
                 # print pos_regions.shape
             else:
                 binary = 'neg'
-            region_labels[i * len(col_start_idx) + j, :] = 0
+                region_labels[i * len(col_start_idx) + j, :] = 0
             # folder = os.path.join(REGIONS_PATH, binary)
             region = orig[row_start:row_end, col_start:col_end, :]
-            regions[i*len(col_start_idx)+j, :, :] = region
+            regions[i*len(col_start_idx)+j, :, :, :] = region
 
             # region_name = '{}_r{}_c{}_{}.jpg'.format(img_name, row_start, col_start, binary)
             # cv2.imwrite(os.path.join(folder, region_name), region)
