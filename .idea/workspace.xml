@@ -17,8 +17,8 @@
       <file leaf-file-name="train_regions.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/train_regions.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="229">
-              <caret line="152" column="31" lean-forward="false" selection-start-line="152" selection-start-column="31" selection-end-line="152" selection-end-column="31" />
+            <state relative-caret-position="382">
+              <caret line="189" column="49" lean-forward="true" selection-start-line="189" selection-start-column="49" selection-end-line="189" selection-end-column="49" />
               <folding>
                 <element signature="e#116#126#0" expanded="true" />
               </folding>
@@ -29,8 +29,8 @@
       <file leaf-file-name="models_classification.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/models_classification.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="229">
-              <caret line="34" column="44" lean-forward="true" selection-start-line="34" selection-start-column="44" selection-end-line="34" selection-end-column="44" />
+            <state relative-caret-position="680">
+              <caret line="40" column="31" lean-forward="true" selection-start-line="40" selection-start-column="31" selection-end-line="40" selection-end-column="31" />
               <folding>
                 <element signature="e#0#30#0" expanded="true" />
               </folding>
@@ -79,8 +79,8 @@
         <option value="$PROJECT_DIR$/test.py" />
         <option value="$PROJECT_DIR$/models.py" />
         <option value="$PROJECT_DIR$/train_cv.py" />
-        <option value="$PROJECT_DIR$/models_classification.py" />
         <option value="$PROJECT_DIR$/region_cropping.py" />
+        <option value="$PROJECT_DIR$/models_classification.py" />
         <option value="$PROJECT_DIR$/train_regions.py" />
       </list>
     </option>
@@ -202,7 +202,7 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#76#86#0" expanded="true" />
+            <element signature="e#76#86#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -351,15 +351,15 @@
         <state relative-caret-position="-1148">
           <caret line="17" column="27" lean-forward="true" selection-start-line="17" selection-start-column="27" selection-end-line="17" selection-end-column="27" />
           <folding>
-            <element signature="e#76#86#0" expanded="true" />
+            <element signature="e#76#86#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/models_classification.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="229">
-          <caret line="34" column="44" lean-forward="true" selection-start-line="34" selection-start-column="44" selection-end-line="34" selection-end-column="44" />
+        <state relative-caret-position="680">
+          <caret line="40" column="31" lean-forward="true" selection-start-line="40" selection-start-column="31" selection-end-line="40" selection-end-column="31" />
           <folding>
             <element signature="e#0#30#0" expanded="true" />
           </folding>
@@ -368,8 +368,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/train_regions.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="229">
-          <caret line="152" column="31" lean-forward="false" selection-start-line="152" selection-start-column="31" selection-end-line="152" selection-end-column="31" />
+        <state relative-caret-position="382">
+          <caret line="189" column="49" lean-forward="true" selection-start-line="189" selection-start-column="49" selection-end-line="189" selection-end-column="49" />
           <folding>
             <element signature="e#116#126#0" expanded="true" />
           </folding>

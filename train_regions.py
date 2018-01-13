@@ -14,7 +14,7 @@ from keras.applications.vgg16 import preprocess_input
 from keras.utils.np_utils import to_categorical
 
 IMG_H, IMG_W = 224, 224
-NUM_EPOCHS = 100
+NUM_EPOCHS = 5
 BATCH_SIZE = 16
 NUM_COORDS = 2
 LABEL_FILE = 'labels.txt'
@@ -151,7 +151,7 @@ def load_data(src_path):
     label_dict = load_labels(os.path.join(src_path,LABEL_FILE))
 
     # TODO use some for testing
-    train_set = train_set[:10]
+    # train_set = train_set[:10]
     for image_name in train_set:
         # image_path = os.path.join(src_path, image_name)
         # get coordinates
@@ -172,6 +172,26 @@ def load_data(src_path):
     return x, y
 
 
+def data_partition(x, y, val_ratio=0.1):
+    # split input and return train and val data in tuple (x,y)
+    num_samples = x.shape[0]
+    num_train = int(num_samples * (1 - val_ratio))
+    x_train = x[:num_train, :, :, :]
+    y_train = y[:num_train, :]
+    x_val = x[num_train:, :, :, :]
+    y_val = x[num_train:, :, :, :]
+    return (x_train, y_train), (x_val, y_val)
+
+
+def data_gen(data_set):
+    (x, y) = data_set
+    num_samples = x.shape[0]
+    while True:
+        steps = range(0, num_samples, BATCH_SIZE)
+        for idx in steps:
+            yield (x[idx:idx+BATCH_SIZE, :, :, :], y[idx:idx+BATCH_SIZE, :])
+
+
 def main(argv):
     """
     Creates a Convolutional Neural Network, train on the data in input source directory, and save weights.
@@ -187,8 +207,17 @@ def main(argv):
     model = build_model(MODEL_NAME)
     # Get data
     x_train, y_train = load_data(train_dir)
+    train_set, val_set = data_partition(x_train, y_train, 0.1)
     # Train model
-    model.fit(x=x_train, y=y_train, batch_size=BATCH_SIZE, epochs=NUM_EPOCHS, validation_split=0.1)
+    # model.fit(x=x_train, y=y_train, batch_size=BATCH_SIZE, epochs=NUM_EPOCHS, validation_split=0.1)
+    num_samples = train_set[0].shape[0]
+    val_spl_num = val_set[0].shape[0]
+    model.fit_generator(generator=data_gen(train_set),
+                        steps_per_epoch=num_samples // BATCH_SIZE,
+                        epochs=NUM_EPOCHS,
+                        validation_data=data_gen(train_set),
+                        validation_steps=val_spl_num // BATCH_SIZE,
+                        )
     # Save model weights
     model.save(WEIGHTS_PATH)
 
