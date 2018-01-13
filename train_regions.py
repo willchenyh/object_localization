@@ -149,6 +149,9 @@ def load_data(src_path):
     images = []
     labels = []
     label_dict = load_labels(os.path.join(src_path,LABEL_FILE))
+
+    # TODO use some for testing
+    train_set = train_set[:10]
     for image_name in train_set:
         # image_path = os.path.join(src_path, image_name)
         # get coordinates

@@ -17,8 +17,8 @@
       <file leaf-file-name="train_regions.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/train_regions.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="416">
-              <caret line="118" column="61" lean-forward="true" selection-start-line="118" selection-start-column="61" selection-end-line="118" selection-end-column="61" />
+            <state relative-caret-position="229">
+              <caret line="152" column="31" lean-forward="false" selection-start-line="152" selection-start-column="31" selection-end-line="152" selection-end-column="31" />
               <folding>
                 <element signature="e#116#126#0" expanded="true" />
               </folding>
@@ -368,8 +368,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/train_regions.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="416">
-          <caret line="118" column="61" lean-forward="true" selection-start-line="118" selection-start-column="61" selection-end-line="118" selection-end-column="61" />
+        <state relative-caret-position="229">
+          <caret line="152" column="31" lean-forward="false" selection-start-line="152" selection-start-column="31" selection-end-line="152" selection-end-column="31" />
           <folding>
             <element signature="e#116#126#0" expanded="true" />
           </folding>
