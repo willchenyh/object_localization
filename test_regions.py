@@ -143,15 +143,34 @@ def crop_regions(src_path, img_name, model):
 
 
 def test_on_all(src_path, model):
-    file_list = os.listdir(src_path)
-    img_name_list = sorted([fname for fname in file_list if fname.endswith('.jpg')])
+    # file_list = os.listdir(src_path)
+    # img_name_list = sorted([fname for fname in file_list if fname.endswith('.jpg')])
 
-    correct = 0
-    for img_name in img_name_list:
-        correct += crop_regions(src_path, img_name, model)
-    accuracy = correct / float(len(img_name_list))
-    print '========================='
-    print 'total accuracy', accuracy
+    # get set partitions
+    f = open('sets_partition.txt', 'rb')
+    train_list = []
+    val_list = []
+    test_list = []
+    sets_list = [train_list, val_list, test_list]
+    for line in f.readlines():
+        line = line.strip()
+        line_splits = line.split(' ')
+        img_name, set_idx = line_splits[0], line_splits[1]
+        if set_idx == 0:
+            train_list.append(img_name)
+        elif set_idx == 1:
+            val_list.append(img_name)
+        elif set_idx == 2:
+            test_list.append(img_name)
+
+    for i, dataset in enumerate(sets_list):
+        correct = 0
+        for img_name in dataset:
+            correct += crop_regions(src_path, img_name, model)
+        accuracy = correct / float(len(dataset))
+        print '========================='
+        print 'set idx:', i
+        print 'total accuracy', accuracy, '\n'
 
 
 def main(argv):
