@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="47f9c7af-eaaa-4286-9870-7da185d04bf5" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/models_classification.py" afterPath="$PROJECT_DIR$/models_classification.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/train_regions.py" afterPath="$PROJECT_DIR$/train_regions.py" />
     </list>
     <ignored path="$PROJECT_DIR$/.idea/" />
@@ -15,11 +15,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="train_regions.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="train_regions.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/train_regions.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="382">
-              <caret line="168" column="45" lean-forward="true" selection-start-line="168" selection-start-column="45" selection-end-line="168" selection-end-column="45" />
+            <state relative-caret-position="314">
+              <caret line="215" column="47" lean-forward="true" selection-start-line="215" selection-start-column="47" selection-end-line="215" selection-end-column="47" />
               <folding>
                 <element signature="e#116#126#0" expanded="true" />
               </folding>
@@ -27,11 +27,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="models_classification.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="models_classification.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/models_classification.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="357">
-              <caret line="36" column="23" lean-forward="true" selection-start-line="36" selection-start-column="23" selection-end-line="36" selection-end-column="23" />
+            <state relative-caret-position="680">
+              <caret line="40" column="31" lean-forward="true" selection-start-line="40" selection-start-column="31" selection-end-line="40" selection-end-column="31" />
               <folding>
                 <element signature="e#0#30#0" expanded="true" />
               </folding>
@@ -81,8 +81,8 @@
         <option value="$PROJECT_DIR$/models.py" />
         <option value="$PROJECT_DIR$/train_cv.py" />
         <option value="$PROJECT_DIR$/region_cropping.py" />
-        <option value="$PROJECT_DIR$/train_regions.py" />
         <option value="$PROJECT_DIR$/models_classification.py" />
+        <option value="$PROJECT_DIR$/train_regions.py" />
       </list>
     </option>
   </component>
@@ -203,7 +203,7 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#76#86#0" expanded="true" />
+            <element signature="e#76#86#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -352,27 +352,27 @@
         <state relative-caret-position="-1148">
           <caret line="17" column="27" lean-forward="true" selection-start-line="17" selection-start-column="27" selection-end-line="17" selection-end-column="27" />
           <folding>
-            <element signature="e#76#86#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/train_regions.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="382">
-          <caret line="168" column="45" lean-forward="true" selection-start-line="168" selection-start-column="45" selection-end-line="168" selection-end-column="45" />
-          <folding>
-            <element signature="e#116#126#0" expanded="true" />
+            <element signature="e#76#86#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/models_classification.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="357">
-          <caret line="36" column="23" lean-forward="true" selection-start-line="36" selection-start-column="23" selection-end-line="36" selection-end-column="23" />
+        <state relative-caret-position="680">
+          <caret line="40" column="31" lean-forward="true" selection-start-line="40" selection-start-column="31" selection-end-line="40" selection-end-column="31" />
           <folding>
             <element signature="e#0#30#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/train_regions.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="314">
+          <caret line="215" column="47" lean-forward="true" selection-start-line="215" selection-start-column="47" selection-end-line="215" selection-end-column="47" />
+          <folding>
+            <element signature="e#116#126#0" expanded="true" />
           </folding>
         </state>
       </provider>
