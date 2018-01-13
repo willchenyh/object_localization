@@ -180,7 +180,7 @@ def data_partition(src_path, val_ratio=0.1):
 
     # split input list and return train and val img names
     num_samples = len(img_name_list)
-    num_train = num_samples * val_ratio
+    num_train = int(num_samples * (1 - val_ratio))
     train_imgs = img_name_list[:num_train]
     val_imgs = img_name_list[num_train:]
     return train_imgs, val_imgs
@@ -191,6 +191,7 @@ def data_gen(src_path, img_name_list):
     while True:
         for img_name in img_name_list:
             regions, rg_labels = crop_regions(src_path, img_name)
+            rg_labels = to_categorical(rg_labels, 2)
             num_samples = regions.shape[0]
             steps = range(0, num_samples, BATCH_SIZE)
             for idx in steps:
@@ -219,6 +220,10 @@ def main(argv):
     # model.fit(x=x_train, y=y_train, batch_size=BATCH_SIZE, epochs=NUM_EPOCHS, validation_split=0.1)
     num_samples = len(train_list) * NUM_RG_PER_IMG
     val_spl_num = len(val_list) * NUM_RG_PER_IMG
+
+    # print 
+    # print num_samples // BATCH_SIZE
+
     model.fit_generator(generator=train_gen,
                         steps_per_epoch=num_samples // BATCH_SIZE,
                         epochs=NUM_EPOCHS,
