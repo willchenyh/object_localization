@@ -14,7 +14,7 @@ from keras.applications.vgg16 import preprocess_input
 from keras.utils.np_utils import to_categorical
 
 IMG_H, IMG_W = 224, 224
-NUM_EPOCHS = 100
+NUM_EPOCHS = 5
 BATCH_SIZE = 16
 NUM_COORDS = 2
 LABEL_FILE = 'labels.txt'
@@ -186,9 +186,10 @@ def data_partition(x, y, val_ratio=0.1):
 def data_gen(data_set):
     (x, y) = data_set
     num_samples = x.shape[0]
-    steps = range(0, num_samples, BATCH_SIZE)
-    for idx in steps:
-        yield (x[idx:idx+BATCH_SIZE, :, :, :], y[idx:idx+BATCH_SIZE, :])
+    while True:
+        steps = range(0, num_samples, BATCH_SIZE)
+        for idx in steps:
+            yield (x[idx:idx+BATCH_SIZE, :, :, :], y[idx:idx+BATCH_SIZE, :])
 
 
 def main(argv):
