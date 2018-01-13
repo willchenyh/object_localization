@@ -105,7 +105,7 @@ def crop_regions(src_path, img_name, model):
     col_nums = np.remainder(pos_idx, len(col_start_idx))
     col_idx = col_nums * col_step_size
     rnc = np.concatenate((row_idx, col_idx), axis=1)
-    print 'rnc shape', rnc.shape
+    # print 'rnc shape', rnc.shape
     pos_mean = np.mean(rnc, axis=0)
 
 
@@ -131,14 +131,14 @@ def crop_regions(src_path, img_name, model):
     dist = np.linalg.norm(center_normal - np.array([[y_normalized, x_normalized]]))
 
     print img_name
-    print 'center', center_normal, 'truth', (y_normalized, x_normalized)
+    # print 'center', center_normal, 'truth', (y_normalized, x_normalized)
     
     correct = 0
     if dist <= 0.05:
         # print 'yayyyyyy!!!!!!!!!!!!!!!!!'
         correct = 1
-    print 'dist', dist, '     ', correct
-    print
+    # print 'dist', dist, '     ', correct
+    # print
     return correct
 
 
@@ -147,22 +147,38 @@ def test_on_all(src_path, model):
     # img_name_list = sorted([fname for fname in file_list if fname.endswith('.jpg')])
 
     # get set partitions
-    f = open('sets_partition.txt', 'rb')
-    train_list = []
-    val_list = []
-    test_list = []
-    sets_list = [train_list, val_list, test_list]
-    for line in f.readlines():
-        line = line.strip()
-        line_splits = line.split(' ')
-        img_name, set_idx = line_splits[0], line_splits[1]
-        if set_idx == 0:
-            train_list.append(img_name)
-        elif set_idx == 1:
-            val_list.append(img_name)
-        elif set_idx == 2:
-            test_list.append(img_name)
+    f = open('random_list.txt', 'rb')
+    img_name_list = f.readlines()
+    img_name_list = [img_name.strip() for img_name in img_name_list]
 
+    # split input list and return train and val img names
+    num_samples = len(img_name_list)
+    # num_train = int(num_samples * (1 - val_ratio))
+    # train_imgs = img_name_list[:num_train]
+    # val_imgs = img_name_list[num_train:]
+
+
+    idx = 0
+
+    val_ratio = 0.1
+    test_ratio = 0.2
+
+    num_test = int(num_samples * test_ratio)
+    # for idx in range(5):
+    if idx == 4:
+        test_imgs = img_name_list[idx * num_test:]
+        train_val_imgs = img_name_list[:idx * num_test]
+    else:
+        test_imgs = img_name_list[idx * num_test:(idx + 1) * num_test]
+        train_val_imgs = img_name_list[:idx * num_test] + img_name_list[(idx + 1) * num_test:]
+        # break
+
+    num_train = int(len(train_val_imgs) * (1 - val_ratio))
+
+    train_imgs = train_val_imgs[:num_train]
+    val_imgs = train_val_imgs[num_train:]
+
+    sets_list = [train_imgs, val_imgs, test_imgs]
     for i, dataset in enumerate(sets_list):
         correct = 0
         for img_name in dataset:
