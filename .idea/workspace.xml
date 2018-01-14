@@ -2,9 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="47f9c7af-eaaa-4286-9870-7da185d04bf5" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/classifier.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/test_regions.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/train_regions.py" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/p2/test_regions.py" afterPath="$PROJECT_DIR$/p2/test_regions.py" />
     </list>
     <ignored path="$PROJECT_DIR$/.idea/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -16,25 +14,23 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="train_regions.py" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/p2/train_regions.py">
+      <file leaf-file-name="phone_finder.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/p2/phone_finder.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="221">
-              <caret line="31" column="0" lean-forward="true" selection-start-line="31" selection-start-column="0" selection-end-line="31" selection-end-column="0" />
-              <folding>
-                <element signature="e#116#126#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="416">
+              <caret line="230" column="22" lean-forward="true" selection-start-line="230" selection-start-column="22" selection-end-line="230" selection-end-column="22" />
+              <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="classifier.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/p2/classifier.py">
+      <file leaf-file-name="train_regions.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/p2/train_regions.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="6" selection-end-column="15" />
+            <state relative-caret-position="68">
+              <caret line="61" column="7" lean-forward="true" selection-start-line="61" selection-start-column="7" selection-end-line="61" selection-end-column="7" />
               <folding>
-                <element signature="e#0#30#0" expanded="true" />
+                <element signature="e#116#126#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -63,6 +59,7 @@
       <find>MODEL_NAME</find>
       <find>build</find>
       <find>image</find>
+      <find>NUM_RG</find>
     </findStrings>
     <replaceStrings>
       <replace>STEP_PCT</replace>
@@ -91,6 +88,8 @@
         <option value="$PROJECT_DIR$/models_classification.py" />
         <option value="$PROJECT_DIR$/train_regions.py" />
         <option value="$PROJECT_DIR$/p2/train_regions.py" />
+        <option value="$PROJECT_DIR$/p2/test_regions.py" />
+        <option value="$PROJECT_DIR$/p2/phone_finder.py" />
       </list>
     </option>
   </component>
@@ -450,31 +449,39 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/p2/test_regions.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/p2/classifier.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="6" selection-end-column="15" />
           <folding>
-            <element signature="e#0#30#0" expanded="true" />
+            <element signature="e#0#30#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/p2/train_regions.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="221">
-          <caret line="31" column="0" lean-forward="true" selection-start-line="31" selection-start-column="0" selection-end-line="31" selection-end-column="0" />
+        <state relative-caret-position="68">
+          <caret line="61" column="7" lean-forward="true" selection-start-line="61" selection-start-column="7" selection-end-line="61" selection-end-column="7" />
           <folding>
             <element signature="e#116#126#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/p2/test_regions.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="59">
+          <caret line="215" column="12" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="237" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/p2/phone_finder.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="416">
+          <caret line="230" column="22" lean-forward="true" selection-start-line="230" selection-start-column="22" selection-end-line="230" selection-end-column="22" />
+          <folding />
         </state>
       </provider>
     </entry>
