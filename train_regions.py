@@ -8,8 +8,8 @@ import sys
 import numpy as np
 import os
 import cv2
-from models_classification import build_model
-from keras.preprocessing import image
+from classifier import build_vgg16
+# from keras.preprocessing import image
 from keras.applications.vgg16 import preprocess_input
 from keras.utils.np_utils import to_categorical
 
@@ -18,8 +18,7 @@ NUM_EPOCHS = 3
 BATCH_SIZE = 32
 NUM_COORDS = 2
 LABEL_FILE = 'labels.txt'
-MODEL_NAME = 'vgg16'
-WEIGHTS_PATH = 'find_phone_{}_weights.h5'.format(MODEL_NAME)
+WEIGHTS_PATH = 'find_phone_classifier_weights.h5'
 STEP_PCT = 0.20  # of small region
 REGION_PCT = 1.0 / 6.0  # of sides of original image
 NUM_RG_PER_IMG = 728
@@ -36,41 +35,43 @@ def load_labels(file_path):
     f = open(file_path, 'rb')
     content = f.readlines()
     label_dict = {}
+    img_name_list = []
     for label in content:
         label_parts = label.strip().split(' ')
+        img_name_list.append(label_parts[0])
         label_dict[label_parts[0]] = (float(label_parts[1]), float(label_parts[2]))
-    return label_dict
+    return img_name_list, label_dict
 
 
-def augment(img_path, cx, cy):
-    """
-    Flips input image horizontally and vertically.
-    :param img_path: image path
-    :param cx: x coordinate
-    :param cy: y coordinate
-    :return: numpy arrays of augmented images and coordinates
-    """
-    assert isinstance(img_path, str)
-    assert isinstance(cx, float) and 0 <= cx <= 1
-    assert isinstance(cy, float) and 0 <= cy <= 1
+# def augment(img_path, cx, cy):
+#     """
+#     Flips input image horizontally and vertically.
+#     :param img_path: image path
+#     :param cx: x coordinate
+#     :param cy: y coordinate
+#     :return: numpy arrays of augmented images and coordinates
+#     """
+#     assert isinstance(img_path, str)
+#     assert isinstance(cx, float) and 0 <= cx <= 1
+#     assert isinstance(cy, float) and 0 <= cy <= 1
+#
+#     # load RGB image and preprocess image as required by model
+#     orig = cv2.imread(img_path, 1).astype('float64')
+#     orig = cv2.resize(orig, (IMG_H, IMG_W))
+#     orig = orig[:,:,[2,1,0]]
+#     img = np.expand_dims(orig, axis=0)
+#     img = preprocess_input(img)
+#
+#     # flip image and convert label
+#     img_lr = image.flip_axis(img, 2)
+#     img_ud = image.flip_axis(img, 1)
+#     img_lrud = image.flip_axis(img_lr, 1)
+#     x_augmented = np.concatenate((img,img_lr,img_ud,img_lrud), axis=0)
+#     y_augmented = np.array([[cx, cy], [1 - cx, cy], [cx, 1 - cy], [1 - cx, 1 - cy]])
+#     return x_augmented, y_augmented
 
-    # load RGB image and preprocess image as required by model
-    orig = cv2.imread(img_path, 1).astype('float64')
-    orig = cv2.resize(orig, (IMG_H, IMG_W))
-    orig = orig[:,:,[2,1,0]]
-    img = np.expand_dims(orig, axis=0)
-    img = preprocess_input(img)
 
-    # flip image and convert label
-    img_lr = image.flip_axis(img, 2)
-    img_ud = image.flip_axis(img, 1)
-    img_lrud = image.flip_axis(img_lr, 1)
-    x_augmented = np.concatenate((img,img_lr,img_ud,img_lrud), axis=0)
-    y_augmented = np.array([[cx, cy], [1 - cx, cy], [cx, 1 - cy], [1 - cx, 1 - cy]])
-    return x_augmented, y_augmented
-
-
-def crop_regions(src_path, img_name):
+def crop_regions(src_path, img_name, label):
 
     orig = cv2.imread(os.path.join(src_path, img_name), 1).astype('float64')
     orig = orig[:, :, [2, 1, 0]]
@@ -84,35 +85,38 @@ def crop_regions(src_path, img_name):
     # print reg_height, reg_width
 
     # load label dict
-    label_dict = load_labels(os.path.join(src_path, LABEL_FILE))
-    x_normalized, y_normalized = label_dict[img_name]
+    # label_dict = load_labels(os.path.join(src_path, LABEL_FILE))
+    # x_normalized, y_normalized = label_dict[img_name]
+    (x_normalized, y_normalized) = label
     x_pixel, y_pixel = x_normalized * orig_width, y_normalized * orig_height
 
     # crop regions, with half overlap. => 7 along height, 9 along width
-    regions = []
+    # regions = []
     row_step_size = int(reg_height * STEP_PCT)
     col_step_size = int(reg_width * STEP_PCT)
     row_start_idx = range(0, orig_height-reg_height, row_step_size)
     col_start_idx = range(0, orig_width-reg_width, col_step_size)
 
-    pos_regions = np.array([[-1, -1]])  # two starting coordinates
+    # pos_regions = np.array([[-1, -1]])  # two starting coordinates
 
+    # save cropped samples and their binary labels to numpy arrays
     num_regions = len(row_start_idx) * len(col_start_idx)
     regions = np.zeros((num_regions, IMG_H, IMG_W, 3))
     region_labels = np.zeros((num_regions, 1))
+    # crop samples
     for i, row_start in enumerate(row_start_idx):
         for j, col_start in enumerate(col_start_idx):
             row_end = row_start + reg_height
             col_end = col_start + reg_width
             if row_start < y_pixel < row_end and col_start < x_pixel < col_end:
-                binary = 'pos'
-                region_labels[i*len(col_start_idx)+j, :] = 1
+                # binary = 'pos'
+                region_labels[i * len(col_start_idx) + j, :] = 1
                 # add coords to array
                 # coords = np.array([[row_start, col_start]])
                 # pos_regions = np.concatenate((pos_regions, coords), axis=0)
                 # print pos_regions.shape
             else:
-                binary = 'neg'
+                # binary = 'neg'
                 region_labels[i * len(col_start_idx) + j, :] = 0
             # folder = os.path.join(REGIONS_PATH, binary)
             region = orig[row_start:row_end, col_start:col_end, :]
@@ -134,52 +138,52 @@ def crop_regions(src_path, img_name):
     return regions, region_labels
 
 
-def load_data(src_path):
-    """
-    Load images and labels from the input directory.
-    :param src_path: directory with images and label file
-    :return: numpy arrays of images and labels
-    """
-    assert isinstance(src_path, str)
+# def load_data(src_path):
+#     """
+#     Load images and labels from the input directory.
+#     :param src_path: directory with images and label file
+#     :return: numpy arrays of images and labels
+#     """
+#     assert isinstance(src_path, str)
+#
+#     # get list of image names
+#     file_list = os.listdir(src_path)
+#     train_set = [fname for fname in file_list if fname.endswith('.jpg')]
+#
+#     # read images into numpy arrays
+#     images = []
+#     labels = []
+#     label_dict = load_labels(os.path.join(src_path,LABEL_FILE))
+#
+#     # TODO use some for testing
+#     # train_set = train_set[:10]
+#     for image_name in train_set:
+#         # image_path = os.path.join(src_path, image_name)
+#         # get coordinates
+#         cx, cy = label_dict[image_name]
+#         # # augment this image
+#         # images_augmented, lbs_augmented = augment(image_path, cx, cy)
+#         # images.append(images_augmented)
+#         # labels.append(lbs_augmented)
+#
+#         # crop regions and get labels
+#         regions, rg_labels = crop_regions(src_path, image_name)
+#         images.append(regions)
+#         labels.append(rg_labels)
+#
+#     x = np.concatenate(tuple(images), axis=0)
+#     y = np.concatenate(tuple(labels), axis=0)
+#     y = to_categorical(y, 2)
+#     return x, y
 
-    # get list of image names
-    file_list = os.listdir(src_path)
-    train_set = [fname for fname in file_list if fname.endswith('.jpg')]
 
-    # read images into numpy arrays
-    images = []
-    labels = []
-    label_dict = load_labels(os.path.join(src_path,LABEL_FILE))
-
-    # TODO use some for testing
-    # train_set = train_set[:10]
-    for image_name in train_set:
-        # image_path = os.path.join(src_path, image_name)
-        # get coordinates
-        cx, cy = label_dict[image_name]
-        # # augment this image
-        # images_augmented, lbs_augmented = augment(image_path, cx, cy)
-        # images.append(images_augmented)
-        # labels.append(lbs_augmented)
-
-        # crop regions and get labels
-        regions, rg_labels = crop_regions(src_path, image_name)
-        images.append(regions)
-        labels.append(rg_labels)
-
-    x = np.concatenate(tuple(images), axis=0)
-    y = np.concatenate(tuple(labels), axis=0)
-    y = to_categorical(y, 2)
-    return x, y
-
-
-def data_partition(src_path, val_ratio=0.1, test_ratio=0.2):
+def data_partition(src_path, img_name_list, val_ratio=0.1):
     # get list of image names
     # file_list = os.listdir(src_path)
     # img_name_list = [fname for fname in file_list if fname.endswith('.jpg')]
-    f = open('random_list.txt', 'rb')
-    img_name_list = f.readlines()
-    img_name_list = [img_name.strip() for img_name in img_name_list]
+    # f = open('random_list.txt', 'rb')
+    # img_name_list = f.readlines()
+    # img_name_list = [img_name.strip() for img_name in img_name_list]
 
     # split input list and return train and val img names
     num_samples = len(img_name_list)
@@ -188,23 +192,23 @@ def data_partition(src_path, val_ratio=0.1, test_ratio=0.2):
     # val_imgs = img_name_list[num_train:]
 
 
-    idx = 1
-    print 'train using test idx', idx
+    # idx = 1
+    # print 'train using test idx', idx
+    #
+    # num_test = int(num_samples * test_ratio)
+    # # for idx in range(5):
+    # if idx == 4:
+    #     test_imgs = img_name_list[idx * num_test:]
+    #     train_val_imgs = img_name_list[:idx*num_test]
+    # else:
+    #     test_imgs = img_name_list[idx*num_test:(idx+1)*num_test]
+    #     train_val_imgs = img_name_list[:idx*num_test] + img_name_list[(idx+1)*num_test:]
+    #     # break
 
-    num_test = int(num_samples * test_ratio)
-    # for idx in range(5):
-    if idx == 4:
-        test_imgs = img_name_list[idx * num_test:]
-        train_val_imgs = img_name_list[:idx*num_test]
-    else:
-        test_imgs = img_name_list[idx*num_test:(idx+1)*num_test]
-        train_val_imgs = img_name_list[:idx*num_test] + img_name_list[(idx+1)*num_test:]
-        # break
+    num_train = int(num_samples * (1 - val_ratio))
 
-    num_train = int(len(train_val_imgs) * (1 - val_ratio))
-
-    train_imgs = train_val_imgs[:num_train]
-    val_imgs = train_val_imgs[num_train:]
+    train_imgs = img_name_list[:num_train]
+    val_imgs = img_name_list[num_train:]
 
     # num_train = int(num_samples * (1 - val_ratio - test_ratio))
     # num_val = int(num_samples * val_ratio)
@@ -221,14 +225,14 @@ def data_partition(src_path, val_ratio=0.1, test_ratio=0.2):
     # for img in test_imgs:
     #     f.write(img+' 2\n')
 
-    return train_imgs, val_imgs, test_imgs
+    return train_imgs, val_imgs
 
 
-def data_gen(src_path, img_name_list):
+def data_gen(src_path, img_name_list, label_dict):
 
     while True:
         for img_name in img_name_list:
-            regions, rg_labels = crop_regions(src_path, img_name)
+            regions, rg_labels = crop_regions(src_path, img_name, label_dict[img_name])
             rg_labels = to_categorical(rg_labels, 2)
             num_samples = regions.shape[0]
             steps = range(0, num_samples, BATCH_SIZE)
@@ -246,33 +250,33 @@ def main(argv):
     assert isinstance(argv, list)
     assert len(argv) == 1
 
-
-
     # read command line arguments
     train_dir = argv[0]
     # make model
-    model = build_model(MODEL_NAME)
-    # Get data
-    train_list, val_list, test_list = data_partition(train_dir)
-    train_gen = data_gen(train_dir, train_list)
-    val_gen = data_gen(train_dir, val_list)
+    model = build_vgg16()
+    # get labels and data lists
+    img_name_list, label_dict = load_labels(os.path.join(train_dir, LABEL_FILE))
+    train_list, val_list = data_partition(train_dir, img_name_list)
+    # create data generator for training
+    train_gen = data_gen(train_dir, train_list, label_dict)
+    val_gen = data_gen(train_dir, val_list, label_dict)
 
     # Train model
     # model.fit(x=x_train, y=y_train, batch_size=BATCH_SIZE, epochs=NUM_EPOCHS, validation_split=0.1)
-    num_samples = len(train_list) * NUM_RG_PER_IMG
-    val_spl_num = len(val_list) * NUM_RG_PER_IMG
+    num_train = len(train_list) * NUM_RG_PER_IMG
+    num_val = len(val_list) * NUM_RG_PER_IMG
 
     # print 
     # print num_samples // BATCH_SIZE
 
     model.fit_generator(generator=train_gen,
-                        steps_per_epoch=num_samples // BATCH_SIZE,
+                        steps_per_epoch=num_train // BATCH_SIZE,
                         # steps_per_epoch=20,
                         epochs=NUM_EPOCHS,
                         # epochs=3,
                         validation_data=val_gen,
                         # validation_data=train_gen,
-                        validation_steps=val_spl_num // BATCH_SIZE,
+                        validation_steps=num_val // BATCH_SIZE,
                         # validation_steps=20,
                         )
 
