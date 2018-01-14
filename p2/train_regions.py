@@ -5,9 +5,10 @@ Author: Yuhan (Will) Chen
 """
 
 import sys
-import numpy as np
 import os
+import random
 import cv2
+import numpy as np
 # from classifier import build_vgg16
 # from keras.preprocessing import image
 from keras.applications.vgg16 import preprocess_input
@@ -73,6 +74,7 @@ def load_labels(file_path):
         label_parts = label.strip().split(' ')
         img_name_list.append(label_parts[0])
         label_dict[label_parts[0]] = (float(label_parts[1]), float(label_parts[2]))
+    random.shuffle(img_name_list)
     return img_name_list, label_dict
 
 
@@ -289,6 +291,13 @@ def main(argv):
     model = build_vgg16()
     # get labels and data lists
     img_name_list, label_dict = load_labels(os.path.join(train_dir, LABEL_FILE))
+
+    #TODO========================================================================testing purpose
+    print 'testing images:'
+    print img_name_list[:8]
+    img_name_list = img_name_list[8:]
+    #TODO========================================================================testing purpose
+
     train_list, val_list = data_partition(train_dir, img_name_list)
     # create data generator for training
     train_gen = data_gen(train_dir, train_list, label_dict)
