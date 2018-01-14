@@ -8,20 +8,53 @@ import sys
 import numpy as np
 import os
 import cv2
-from classifier import build_vgg16
+# from classifier import build_vgg16
 # from keras.preprocessing import image
 from keras.applications.vgg16 import preprocess_input
 from keras.utils.np_utils import to_categorical
+from keras.models import Model
+from keras.applications.vgg16 import VGG16
+# from keras.applications.xception import Xception
+from keras import optimizers
+from keras.layers import Flatten, Dense, Dropout
+
 
 IMG_H, IMG_W = 224, 224
 NUM_EPOCHS = 3
 BATCH_SIZE = 32
-NUM_COORDS = 2
+NUM_CLASSES = 2
 LABEL_FILE = 'labels.txt'
 WEIGHTS_PATH = 'find_phone_classifier_weights.h5'
 STEP_PCT = 0.20  # of small region
 REGION_PCT = 1.0 / 6.0  # of sides of original image
 NUM_RG_PER_IMG = 728
+
+
+def build_vgg16():
+    """
+    Build the VGG16 network
+    :return: keras model instance
+    """
+
+    # build layers
+    base_model = VGG16(weights='imagenet', include_top=False, input_shape=(224, 224, 3))
+    base_out = base_model.output
+    flat = Flatten()(base_out)
+    x = Dense(4096, activation='relu')(flat)
+    x = Dropout(0.5)(x)
+    x = Dense(4096, activation='relu')(x)
+    predictions = Dense(NUM_CLASSES, activation='softmax')(x)
+    model = Model(inputs=base_model.input, outputs=predictions)
+
+    # train only the top layers
+    for layer in base_model.layers:
+        layer.trainable = False
+
+    # compile the model
+    model.compile(optimizer=optimizers.SGD(lr=1e-4, momentum=0.9),
+                  loss='categorical_crossentropy',
+                  metrics=['accuracy'])
+    return model
 
 
 def load_labels(file_path):
