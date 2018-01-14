@@ -17,7 +17,7 @@ WEIGHTS_PATH = 'find_phone_{}_weights.h5'.format(MODEL_NAME)
 LABEL_FILE = 'labels.txt'
 STEP_PCT = 0.20  # of small region
 REGION_PCT = 1.0 / 6.0  # of sides of original image
-NUM_RG_PER_IMG = 180
+NUM_RG_PER_IMG = 728
 
 
 def read_img(img_path):
@@ -95,11 +95,23 @@ def crop_regions(src_path, img_name, model):
 
             regions[i*len(col_start_idx)+j, :, :, :] = region
 
+    
 
     scores = model.predict(x=regions)
     sorted_idx = np.argsort(scores)  # sort index by row
     labels = sorted_idx[:, -1]  # 1d array
+
+    # print 'scores'
+    # print scores
+    # print 'sorted idx'
+    # print sorted_idx
+    # print labels
+
     pos_idx = np.argwhere(labels==1)  # 2d array nx1
+
+    # print 'pos idx'
+    # print pos_idx
+
     row_nums = np.divide(pos_idx, len(col_start_idx))
     row_idx = row_nums * row_step_size
     col_nums = np.remainder(pos_idx, len(col_start_idx))
@@ -109,6 +121,8 @@ def crop_regions(src_path, img_name, model):
     pos_mean = np.mean(rnc, axis=0)
 
 
+
+    # print pos_mean
 
 
 
@@ -130,13 +144,16 @@ def crop_regions(src_path, img_name, model):
 
     dist = np.linalg.norm(center_normal - np.array([[y_normalized, x_normalized]]))
 
-    print img_name
+    
     # print 'center', center_normal, 'truth', (y_normalized, x_normalized)
     
     correct = 0
     if dist <= 0.05:
         # print 'yayyyyyy!!!!!!!!!!!!!!!!!'
         correct = 1
+    else:
+        print dist
+    print img_name, correct
     # print 'dist', dist, '     ', correct
     # print
     return correct
@@ -158,7 +175,8 @@ def test_on_all(src_path, model):
     # val_imgs = img_name_list[num_train:]
 
 
-    idx = 0
+    idx = 1
+    print 'Using test index', idx
 
     val_ratio = 0.1
     test_ratio = 0.2
@@ -179,8 +197,13 @@ def test_on_all(src_path, model):
     val_imgs = train_val_imgs[num_train:]
 
     sets_list = [train_imgs, val_imgs, test_imgs]
+
+    # print sets_list
     for i, dataset in enumerate(sets_list):
         correct = 0
+        # # TODO=================================================================================================
+        # dataset = ['0.jpg','1.jpg']
+        # # TODO=================================================================================================
         for img_name in dataset:
             correct += crop_regions(src_path, img_name, model)
         accuracy = correct / float(len(dataset))

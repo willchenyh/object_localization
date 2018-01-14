@@ -14,15 +14,15 @@ from keras.applications.vgg16 import preprocess_input
 from keras.utils.np_utils import to_categorical
 
 IMG_H, IMG_W = 224, 224
-NUM_EPOCHS = 5
-BATCH_SIZE = 18
+NUM_EPOCHS = 3
+BATCH_SIZE = 32
 NUM_COORDS = 2
 LABEL_FILE = 'labels.txt'
 MODEL_NAME = 'vgg16'
 WEIGHTS_PATH = 'find_phone_{}_weights.h5'.format(MODEL_NAME)
 STEP_PCT = 0.20  # of small region
 REGION_PCT = 1.0 / 6.0  # of sides of original image
-NUM_RG_PER_IMG = 180
+NUM_RG_PER_IMG = 728
 
 
 def load_labels(file_path):
@@ -188,7 +188,8 @@ def data_partition(src_path, val_ratio=0.1, test_ratio=0.2):
     # val_imgs = img_name_list[num_train:]
 
 
-    idx = 0
+    idx = 1
+    print 'train using test idx', idx
 
     num_test = int(num_samples * test_ratio)
     # for idx in range(5):
@@ -231,6 +232,7 @@ def data_gen(src_path, img_name_list):
             rg_labels = to_categorical(rg_labels, 2)
             num_samples = regions.shape[0]
             steps = range(0, num_samples, BATCH_SIZE)
+            # print num_samples
             for idx in steps:
                 yield (regions[idx:idx+BATCH_SIZE, :, :, :], rg_labels[idx:idx+BATCH_SIZE, :])
 
@@ -265,10 +267,21 @@ def main(argv):
 
     model.fit_generator(generator=train_gen,
                         steps_per_epoch=num_samples // BATCH_SIZE,
+                        # steps_per_epoch=20,
                         epochs=NUM_EPOCHS,
+                        # epochs=3,
                         validation_data=val_gen,
+                        # validation_data=train_gen,
                         validation_steps=val_spl_num // BATCH_SIZE,
+                        # validation_steps=20,
                         )
+
+    # (x, y) = next(train_gen)
+    # print model.evaluate(x,y)
+    # (x, y) = next(val_gen)
+    # print model.evaluate(x,y)
+
+
     # Save model weights
     model.save(WEIGHTS_PATH)
 
