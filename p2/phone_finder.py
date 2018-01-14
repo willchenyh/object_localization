@@ -12,7 +12,7 @@ from keras.applications.vgg16 import preprocess_input
 from keras.models import load_model
 
 IMG_H, IMG_W = 224, 224
-WEIGHTS_PATH = 'find_phone_vgg16_weights.h5'
+WEIGHTS_PATH = 'find_phone_classifier_weights.h5'
 # LABEL_FILE = 'labels.txt'
 STEP_PCT = 0.20  # of small region
 REGION_PCT = 1.0 / 6.0  # of sides of original image
@@ -112,15 +112,17 @@ def predict(img_path, model):
     row_idx = row_nums * row_step_size
     col_nums = np.remainder(pos_idx, len(col_start_idx))
     col_idx = col_nums * col_step_size
-    rnc = np.concatenate((row_idx, col_idx), axis=1)
-    # print 'rnc shape', rnc.shape
-    pos_mean = np.mean(rnc, axis=0)
+
+    # rnc = np.concatenate((row_idx, col_idx), axis=1)
+    # pos_mean = np.mean(rnc, axis=0)
+
+    pos = np.concatenate((col_idx, row_idx), axis=1)
+    pos_mean = np.mean(pos, axis=0)
+    center_coord = pos_mean + 0.5 * np.array([[reg_width, reg_height]])
+    center_normal = np.divide(center_coord, np.array([[orig_width, orig_height]]))
+
 
     # print pos_mean
-
-
-
-
 
     # folder = os.path.join(REGIONS_PATH, binary)
     # regions[i*len(col_start_idx)+j, :, :, :] = region
@@ -133,8 +135,8 @@ def predict(img_path, model):
 
     # center_row = pos_mean[0,0] + 0.5 * reg_height
     # center_col = pos_mean[0,1] + 0.5 * reg_width
-    center_coord = pos_mean + 0.5 * np.array([[reg_height, reg_width]])
-    center_normal = np.divide(center_coord, np.array([[orig_height, orig_width]]))
+    # center_coord = pos_mean + 0.5 * np.array([[reg_height, reg_width]])
+    # center_normal = np.divide(center_coord, np.array([[orig_height, orig_width]]))
 
     # dist = np.linalg.norm(center_normal - np.array([[y_normalized, x_normalized]]))
 
@@ -149,7 +151,7 @@ def predict(img_path, model):
     # print img_name, correct
     # print 'dist', dist, '     ', correct
     # print
-    return center_normal
+    return np.around(center_normal, decimals=4)
 
 
 # def test_on_all(src_path, model):
