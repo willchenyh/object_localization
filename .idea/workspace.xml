@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="47f9c7af-eaaa-4286-9870-7da185d04bf5" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/p2/phone_finder.py" afterPath="$PROJECT_DIR$/p2/phone_finder.py" />
     </list>
     <ignored path="$PROJECT_DIR$/.idea/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -14,11 +14,23 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="train_phone_finder.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="phone_finder.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/p2/phone_finder.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-9">
+              <caret line="68" column="82" lean-forward="false" selection-start-line="68" selection-start-column="82" selection-end-line="68" selection-end-column="82" />
+              <folding>
+                <element signature="e#112#122#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="train_phone_finder.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/p2/train_phone_finder.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-2304">
-              <caret line="49" column="0" lean-forward="true" selection-start-line="49" selection-start-column="0" selection-end-line="49" selection-end-column="0" />
+            <state relative-caret-position="272">
+              <caret line="103" column="46" lean-forward="true" selection-start-line="103" selection-start-column="46" selection-end-line="103" selection-end-column="46" />
               <folding>
                 <element signature="e#116#126#0" expanded="true" />
               </folding>
@@ -79,8 +91,8 @@
         <option value="$PROJECT_DIR$/train_regions.py" />
         <option value="$PROJECT_DIR$/p2/train_regions.py" />
         <option value="$PROJECT_DIR$/p2/test_regions.py" />
-        <option value="$PROJECT_DIR$/p2/phone_finder.py" />
         <option value="$PROJECT_DIR$/p2/train_phone_finder.py" />
+        <option value="$PROJECT_DIR$/p2/phone_finder.py" />
       </list>
     </option>
   </component>
@@ -384,14 +396,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/p2/phone_finder.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="943">
-          <caret line="231" column="0" lean-forward="true" selection-start-line="231" selection-start-column="0" selection-end-line="231" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/p2/train_regions.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="68">
@@ -404,10 +408,20 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/p2/train_phone_finder.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2304">
-          <caret line="49" column="0" lean-forward="true" selection-start-line="49" selection-start-column="0" selection-end-line="49" selection-end-column="0" />
+        <state relative-caret-position="272">
+          <caret line="103" column="46" lean-forward="true" selection-start-line="103" selection-start-column="46" selection-end-line="103" selection-end-column="46" />
           <folding>
             <element signature="e#116#126#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/p2/phone_finder.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-9">
+          <caret line="68" column="82" lean-forward="false" selection-start-line="68" selection-start-column="82" selection-end-line="68" selection-end-column="82" />
+          <folding>
+            <element signature="e#112#122#0" expanded="true" />
           </folding>
         </state>
       </provider>
