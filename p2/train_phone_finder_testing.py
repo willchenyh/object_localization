@@ -17,13 +17,14 @@ from keras import optimizers
 from keras.layers import Flatten, Dense, Dropout
 
 
-NUM_EPOCHS = 4
+NUM_EPOCHS = 8  #optimal is 6 TODOOOO TODO
 BATCH_SIZE = 128
 NUM_CLASSES = 2
 LABEL_FILE = 'labels.txt'
 WEIGHTS_PATH = 'find_phone_classifier_weights.h5'
 IMG_H, IMG_W, NUM_CH = 224, 224, 3
-NUM_RG_PER_IMG = 728
+# NUM_RG_PER_IMG = 728
+NUM_RG_PER_IMG = 728 // 3
 STEP_PCT = 1.0 / 5.0  # of small region
 REGION_PCT = 1.0 / 6.0  # of sides of original image
 
@@ -48,7 +49,7 @@ def build_vgg16():
         layer.trainable = False
 
     # compile the model
-    model.compile(optimizer=optimizers.SGD(lr=1e-4, momentum=0.9),
+    model.compile(optimizer=optimizers.SGD(lr=1e-5, momentum=0.9),  #TODO 1e-4
                   loss='categorical_crossentropy',
                   metrics=['accuracy'])
     return model
@@ -70,7 +71,6 @@ def load_labels(file_path):
         label_parts = label.strip().split(' ')
         img_name_list.append(label_parts[0])
         label_dict[label_parts[0]] = (float(label_parts[1]), float(label_parts[2]))
-    # random.shuffle(img_name_list)
     return img_name_list, label_dict
 
 
@@ -104,22 +104,33 @@ def crop_regions(src_path, img_name, label):
     col_step_size = int(reg_width * STEP_PCT)
     row_start_idx = range(0, orig_height-reg_height, row_step_size)
     col_start_idx = range(0, orig_width-reg_width, col_step_size)
-    num_regions = len(row_start_idx) * len(col_start_idx)
-    regions = np.zeros((num_regions, IMG_H, IMG_W, NUM_CH))
-    region_labels = np.zeros((num_regions, 1))
+    rgs_pos = []
+    rgs_neg = []
     for i, row_start in enumerate(row_start_idx):
         for j, col_start in enumerate(col_start_idx):
             row_end = row_start + reg_height
             col_end = col_start + reg_width
-            if row_start < y_pixel < row_end and col_start < x_pixel < col_end:
-                region_labels[i * len(col_start_idx) + j, :] = 1
-            else:
-                region_labels[i * len(col_start_idx) + j, :] = 0
             region = orig[row_start:row_end, col_start:col_end, :]
             region = cv2.resize(region, (IMG_H, IMG_W))
-            regions[i*len(col_start_idx)+j, :, :, :] = region
+            region = np.expand_dims(region, axis=0)
+            if row_start < y_pixel < row_end and col_start < x_pixel < col_end:
+                rgs_pos.append(region)
+            else:
+                rgs_neg.append(region)
 
-    # shuffle region samples
+    # select 1/3 of negative samples
+    random.shuffle(rgs_neg)
+    num_neg = len(rgs_neg)
+    rgs_neg = rgs_neg[:int(num_neg/3)]
+    rgs = rgs_pos + rgs_neg
+    lbs = [1]*len(rgs_pos) + [0]*len(rgs_neg)
+
+    # create data in numpy arrays
+    num_regions = len(lbs)
+    regions = np.concatenate(rgs, axis=0)
+    region_labels = np.asarray(lbs).reshape(num_regions, 1)
+
+    # shuffle data
     idx = range(num_regions)
     random.shuffle(idx)
     regions = regions[idx, :, :, :]
@@ -181,13 +192,6 @@ def main(argv):
     # get labels and data lists
     train_dir = argv[0]
     img_name_list, label_dict = load_labels(os.path.join(train_dir, LABEL_FILE))
-
-    #TODO========================================================================testing purpose
-    print 'testing images:'
-    print img_name_list[:8]
-    img_name_list = img_name_list[8:]
-    #TODO========================================================================testing purpose
-
     train_list, val_list = data_partition(train_dir, img_name_list)
 
     # create data generator for training

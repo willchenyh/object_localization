@@ -12,7 +12,7 @@ from keras.applications.vgg16 import preprocess_input
 from keras.models import load_model
 
 IMG_H, IMG_W = 224, 224
-WEIGHTS_PATH = 'find_phone_vgg16_weights.h5'
+WEIGHTS_PATH = 'find_phone_classifier_weights.h5'
 LABEL_FILE = 'labels.txt'
 STEP_PCT = 0.20  # of small region
 REGION_PCT = 1.0 / 6.0  # of sides of original image
@@ -159,13 +159,13 @@ def crop_regions(src_path, img_name, model):
 
 
 def test_on_all(src_path, model):
-    # file_list = os.listdir(src_path)
-    # img_name_list = sorted([fname for fname in file_list if fname.endswith('.jpg')])
+    file_list = os.listdir(src_path)
+    img_name_list = sorted([fname for fname in file_list if fname.endswith('.jpg')])
 
     # get set partitions
-    f = open('random_list.txt', 'rb')
-    img_name_list = f.readlines()
-    img_name_list = [img_name.strip() for img_name in img_name_list]
+    # f = open('random_list.txt', 'rb')
+    # img_name_list = f.readlines()
+    # img_name_list = [img_name.strip() for img_name in img_name_list]
 
     # split input list and return train and val img names
     num_samples = len(img_name_list)
@@ -174,28 +174,29 @@ def test_on_all(src_path, model):
     # val_imgs = img_name_list[num_train:]
 
 
-    idx = 1
-    print 'Using test index', idx
+    # idx = 1
+    # print 'Using test index', idx
 
-    val_ratio = 0.1
-    test_ratio = 0.2
+    # val_ratio = 0.1
+    # test_ratio = 0.2
 
-    num_test = int(num_samples * test_ratio)
-    # for idx in range(5):
-    if idx == 4:
-        test_imgs = img_name_list[idx * num_test:]
-        train_val_imgs = img_name_list[:idx * num_test]
-    else:
-        test_imgs = img_name_list[idx * num_test:(idx + 1) * num_test]
-        train_val_imgs = img_name_list[:idx * num_test] + img_name_list[(idx + 1) * num_test:]
-        # break
+    # num_test = int(num_samples * test_ratio)
+    # # for idx in range(5):
+    # if idx == 4:
+    #     test_imgs = img_name_list[idx * num_test:]
+    #     train_val_imgs = img_name_list[:idx * num_test]
+    # else:
+    #     test_imgs = img_name_list[idx * num_test:(idx + 1) * num_test]
+    #     train_val_imgs = img_name_list[:idx * num_test] + img_name_list[(idx + 1) * num_test:]
+    #     # break
 
-    num_train = int(len(train_val_imgs) * (1 - val_ratio))
+    # num_train = int(len(train_val_imgs) * (1 - val_ratio))
 
-    train_imgs = train_val_imgs[:num_train]
-    val_imgs = train_val_imgs[num_train:]
+    # train_imgs = train_val_imgs[:num_train]
+    # val_imgs = train_val_imgs[num_train:]
 
-    sets_list = [train_imgs, val_imgs, test_imgs]
+    # sets_list = [train_imgs, val_imgs, test_imgs]
+    sets_list = [img_name_list]
 
     # print sets_list
     for i, dataset in enumerate(sets_list):
@@ -226,7 +227,7 @@ def main(argv):
     # load model
     model = load_model(WEIGHTS_PATH)
     # crop_regions(path, name, model)
-    test_on_all(img_path_path, model)
+    test_on_all(img_path, model)
 
     # predict and print coordinates
     # coords = model.predict(x=img)
